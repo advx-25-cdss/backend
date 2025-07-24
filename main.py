@@ -17,6 +17,9 @@ from routers.ehr import (
     vital_signs_router
 )
 
+# Import diagnosis routers
+from routers.diagnosis import case_router, test_router, medicine_router, treatment_router, diagnosis_router
+
 app = FastAPI(
     title="EHR System API",
     description="A comprehensive Electronic Health Records system with CRUD operations",
@@ -46,6 +49,13 @@ app.include_router(medication_history_router.router, prefix="/api/ehr/medication
 app.include_router(allergy_history_router.router, prefix="/api/ehr/allergy-history", tags=["Allergy History"])
 app.include_router(social_history_router.router, prefix="/api/ehr/social-history", tags=["Social History"])
 app.include_router(vital_signs_router.router, prefix="/api/ehr/vital-signs", tags=["Vital Signs"])
+
+# Include diagnosis routers
+app.include_router(case_router.router, prefix="/api/diagnosis", tags=["Cases"])
+app.include_router(test_router.router, prefix="/api/diagnosis", tags=["Tests"])
+app.include_router(medicine_router.router, prefix="/api/diagnosis", tags=["Medicines"])
+app.include_router(treatment_router.router, prefix="/api/diagnosis", tags=["Treatments"])
+app.include_router(diagnosis_router.router, prefix="/api/diagnosis", tags=["Diagnosis"])
 
 @app.get("/")
 async def root():
