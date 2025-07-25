@@ -20,6 +20,9 @@ from routers.ehr import (
 # Import diagnosis routers
 from routers.diagnosis import case_router, test_router, medicine_router, treatment_router, diagnosis_router, transcription_router
 
+# Import medical imaging router
+from medical_imaging import router as medical_imaging_router
+
 app = FastAPI(
     title="EHR System API",
     description="A comprehensive Electronic Health Records system with CRUD operations",
@@ -57,6 +60,9 @@ app.include_router(medicine_router.router, prefix="/api/diagnosis", tags=["Medic
 app.include_router(treatment_router.router, prefix="/api/diagnosis", tags=["Treatments"])
 app.include_router(diagnosis_router.router, prefix="/api/diagnosis", tags=["Diagnosis"])
 app.include_router(transcription_router.router, prefix="/api/transcription", tags=["Transcription"])
+
+# Include medical imaging router
+app.include_router(medical_imaging_router, prefix="/api/medical-imaging", tags=["Medical Imaging"])
 
 @app.get("/")
 async def root():
