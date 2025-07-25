@@ -18,7 +18,7 @@ from routers.ehr import (
 )
 
 # Import diagnosis routers
-from routers.diagnosis import case_router, test_router, medicine_router, treatment_router, diagnosis_router
+from routers.diagnosis import case_router, test_router, medicine_router, treatment_router, diagnosis_router, transcription_router
 
 app = FastAPI(
     title="EHR System API",
@@ -56,6 +56,7 @@ app.include_router(test_router.router, prefix="/api/diagnosis", tags=["Tests"])
 app.include_router(medicine_router.router, prefix="/api/diagnosis", tags=["Medicines"])
 app.include_router(treatment_router.router, prefix="/api/diagnosis", tags=["Treatments"])
 app.include_router(diagnosis_router.router, prefix="/api/diagnosis", tags=["Diagnosis"])
+app.include_router(transcription_router.router, prefix="/api/transcription", tags=["Transcription"])
 
 @app.get("/")
 async def root():
