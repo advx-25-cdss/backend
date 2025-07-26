@@ -13,7 +13,7 @@ router = APIRouter(prefix="/diagnoses", tags=["Diagnoses"])
 async def create_diagnosis(diagnosis: Diagnosis):
     """Create a new diagnosis"""
     try:
-        diagnosis_dict = diagnosis.dict()
+        diagnosis_dict = diagnosis.model_dump()
         created_diagnosis = await diagnosis_service.create(diagnosis_dict)
         return {"message": "Diagnosis created successfully", "data": created_diagnosis}
     except Exception as e:

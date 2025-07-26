@@ -2,7 +2,6 @@ from fastapi import APIRouter, HTTPException, Query, UploadFile, File
 from typing import List, Optional
 from models.dianosis_models import Test
 from services.diagnosis_service import test_service
-from datetime import datetime
 import base64
 
 router = APIRouter(prefix="/tests", tags=["Tests"])
@@ -11,7 +10,7 @@ router = APIRouter(prefix="/tests", tags=["Tests"])
 async def create_test(test: Test):
     """Create a new test"""
     try:
-        test_dict = test.dict()
+        test_dict = test.model_dump()
         created_test = await test_service.create(test_dict)
         return {"message": "Test created successfully", "data": created_test}
     except Exception as e:

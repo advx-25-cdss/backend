@@ -55,6 +55,7 @@ class Diagnosis(BaseModel):
     diagnosis_name: str
     diagnosis_date: datetime
     status: Literal['active', 'resolved', 'recurrent']
+    probability: float  # Probability of the diagnosis being correct, e.g., 0.85 for 85%
     notes: Optional[str] = None
     follow_up: str
     additional_info: Optional[str] = None

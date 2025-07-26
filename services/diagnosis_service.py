@@ -1,9 +1,10 @@
 from typing import List, Optional
+
+from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorCollection
 from models.dianosis_models import Case, Test, Medicine
 from database import db
 from datetime import datetime, timezone
-import uuid
 
 class DiagnosisService:
     def __init__(self, collection_name: str):
@@ -11,7 +12,7 @@ class DiagnosisService:
 
     @property
     def collection(self) -> AsyncIOMotorCollection:
-        return db.cdss[self.collection_name]
+        return db.cdss.get_collection(self.collection_name)
 
     async def create(self, data: dict) -> dict:
         """Create a new record"""
@@ -20,7 +21,7 @@ class DiagnosisService:
 
         # Generate a UUID string for _id if not provided
         if "_id" not in data:
-            data["_id"] = str(uuid.uuid4())
+            data["_id"] = ObjectId()
 
         data["created_at"] = datetime.now(timezone.utc)
         data["updated_at"] = datetime.now(timezone.utc)
@@ -36,17 +37,26 @@ class DiagnosisService:
     async def get_by_patient_id(self, patient_id: str) -> List[dict]:
         """Get all records for a specific patient"""
         cursor = self.collection.find({"patient_id": patient_id})
-        return await cursor.to_list(length=None)
+        results = await cursor.to_list(length=None)
+        for result in results:
+            result["_id"] = str(result["_id"])
+        return results
 
     async def get_by_case_id(self, case_id: str) -> List[dict]:
         """Get all records for a specific case"""
         cursor = self.collection.find({"case_id": case_id})
-        return await cursor.to_list(length=None)
+        results = await cursor.to_list(length=None)
+        for result in results:
+            result["_id"] = str(result["_id"])
+        return results
 
     async def get_all(self, skip: int = 0, limit: int = 100) -> List[dict]:
         """Get all records with pagination"""
         cursor = self.collection.find().skip(skip).limit(limit)
-        return await cursor.to_list(length=limit)
+        results = await cursor.to_list(length=limit)
+        for result in results:
+            result["_id"] = str(result["_id"])
+        return results
 
     async def update(self, record_id: str, data: dict) -> Optional[dict]:
         """Update a record"""

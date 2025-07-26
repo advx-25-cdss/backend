@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+import numpy as np
+from fastapi import FastAPI, WebSocket
 from database import close_mongo_connection, connect_to_mongo
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -14,11 +15,14 @@ from routers.ehr import (
     medication_history_router,
     allergy_history_router,
     social_history_router,
-    vital_signs_router
+    vital_signs_router,
 )
 
 # Import diagnosis routers
 from routers.diagnosis import case_router, test_router, medicine_router, treatment_router, diagnosis_router
+
+from routers.intelligence import transcription_router
+from routers.intelligence.transcription_router import forward_to_ai_provider, webm_to_librosa_temp
 
 app = FastAPI(
     title="EHR System API",
@@ -57,6 +61,8 @@ app.include_router(medicine_router.router, prefix="/api/diagnosis", tags=["Medic
 app.include_router(treatment_router.router, prefix="/api/diagnosis", tags=["Treatments"])
 app.include_router(diagnosis_router.router, prefix="/api/diagnosis", tags=["Diagnosis"])
 
+app.include_router(transcription_router.router, prefix="/api/intelligence/transcription", tags=["Transcription"])
+
 @app.get("/")
 async def root():
     return {"message": "EHR System API is running", "docs": "/docs"}
@@ -65,6 +71,17 @@ async def root():
 async def health_check():
     return {"status": "healthy", "service": "EHR API"}
 
+@app.websocket("/ws/transcribe")
+async def websocket_transcription(websocket: WebSocket):
+    await websocket.accept()
+
+    while True:
+        audio_data = await websocket.receive_bytes()
+        audio_array = webm_to_librosa_temp(audio_data)
+        ai_response = await forward_to_ai_provider(audio_array.astype(np.float32).tobytes())
+        await websocket.send_text(ai_response)
+
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8080)

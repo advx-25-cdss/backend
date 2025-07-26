@@ -78,7 +78,7 @@ class HistoryPresentIllness(BaseModel):
     patient_id: str
     chief_complaint: str
     history_of_present_illness: str
-    onset: Optional[str] = None  # "sudden", "gradual"
+    onset: Optional[Literal["sudden", "gradual"]] = None  # "sudden", "gradual"
     duration: Optional[str] = None
     severity: Optional[int] = None  # 1-10 scale
     quality: Optional[str] = None
@@ -93,6 +93,7 @@ class HistoryPresentIllness(BaseModel):
 
     class Config:
         allow_population_by_field_name = True
+
 
 class PastMedicalHistory(BaseModel):
     _id: str

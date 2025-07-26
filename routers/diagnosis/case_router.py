@@ -10,7 +10,7 @@ router = APIRouter(prefix="/cases", tags=["Cases"])
 async def create_case(case: Case):
     """Create a new case"""
     try:
-        case_dict = case.dict()
+        case_dict = case.model_dump()
         created_case = await case_service.create(case_dict)
         return {"message": "Case created successfully", "data": created_case}
     except Exception as e:
