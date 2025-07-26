@@ -5,6 +5,7 @@ from services.ehr_service import marital_service
 
 router = APIRouter()
 
+
 @router.post("/", response_model=Marital)
 async def create_marital(marital: Marital):
     """Create new marital record"""
@@ -14,6 +15,7 @@ async def create_marital(marital: Marital):
         return Marital(**created_record)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.get("/{record_id}", response_model=Marital)
 async def get_marital(record_id: str):
@@ -26,6 +28,7 @@ async def get_marital(record_id: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/patient/{patient_id}", response_model=List[Marital])
 async def get_marital_by_patient(patient_id: str):
     """Get all marital records for a specific patient"""
@@ -35,10 +38,10 @@ async def get_marital_by_patient(patient_id: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/", response_model=List[Marital])
 async def get_all_marital(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=1000)
+    skip: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=1000)
 ):
     """Get all marital records with pagination"""
     try:
@@ -46,6 +49,7 @@ async def get_all_marital(
         return [Marital(**record) for record in records]
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.put("/{record_id}", response_model=Marital)
 async def update_marital(record_id: str, marital: Marital):
@@ -58,6 +62,7 @@ async def update_marital(record_id: str, marital: Marital):
         return Marital(**updated_record)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.delete("/{record_id}")
 async def delete_marital(record_id: str):

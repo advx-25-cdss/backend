@@ -5,6 +5,7 @@ from services.ehr_service import medication_history_service
 
 router = APIRouter()
 
+
 @router.post("/", response_model=MedicationHistory)
 async def create_medication_history(mh: MedicationHistory):
     """Create new medication history record"""
@@ -15,16 +16,20 @@ async def create_medication_history(mh: MedicationHistory):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/{record_id}", response_model=MedicationHistory)
 async def get_medication_history(record_id: str):
     """Get medication history record by ID"""
     try:
         record = await medication_history_service.get_by_id(record_id)
         if not record:
-            raise HTTPException(status_code=404, detail="Medication history record not found")
+            raise HTTPException(
+                status_code=404, detail="Medication history record not found"
+            )
         return MedicationHistory(**record)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.get("/patient/{patient_id}", response_model=List[MedicationHistory])
 async def get_medication_history_by_patient(patient_id: str):
@@ -35,10 +40,10 @@ async def get_medication_history_by_patient(patient_id: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/", response_model=List[MedicationHistory])
 async def get_all_medication_history(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=1000)
+    skip: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=1000)
 ):
     """Get all medication history records with pagination"""
     try:
@@ -47,17 +52,21 @@ async def get_all_medication_history(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.put("/{record_id}", response_model=MedicationHistory)
 async def update_medication_history(record_id: str, mh: MedicationHistory):
     """Update medication history record"""
     try:
-        mh_dict = mh.dict(by_alias=True, exclude_unset=True)
+        mh_dict = mh.model_dump(by_alias=True, exclude_unset=True)
         updated_record = await medication_history_service.update(record_id, mh_dict)
         if not updated_record:
-            raise HTTPException(status_code=404, detail="Medication history record not found")
+            raise HTTPException(
+                status_code=404, detail="Medication history record not found"
+            )
         return MedicationHistory(**updated_record)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.delete("/{record_id}")
 async def delete_medication_history(record_id: str):
@@ -65,7 +74,9 @@ async def delete_medication_history(record_id: str):
     try:
         deleted = await medication_history_service.delete(record_id)
         if not deleted:
-            raise HTTPException(status_code=404, detail="Medication history record not found")
+            raise HTTPException(
+                status_code=404, detail="Medication history record not found"
+            )
         return {"message": "Medication history record deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

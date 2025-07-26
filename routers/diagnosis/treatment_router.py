@@ -9,6 +9,7 @@ treatment_service = DiagnosisService("treatments")
 
 router = APIRouter(prefix="/treatments", tags=["Treatments"])
 
+
 @router.post("/", response_model=dict)
 async def create_treatment(treatment: Treatment):
     """Create a new treatment"""
@@ -17,7 +18,10 @@ async def create_treatment(treatment: Treatment):
         created_treatment = await treatment_service.create(treatment_dict)
         return {"message": "Treatment created successfully", "data": created_treatment}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error creating treatment: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error creating treatment: {str(e)}"
+        )
+
 
 @router.get("/{treatment_id}", response_model=dict)
 async def get_treatment_by_id(treatment_id: str):
@@ -27,6 +31,7 @@ async def get_treatment_by_id(treatment_id: str):
         raise HTTPException(status_code=404, detail="Treatment not found")
     return {"data": treatment}
 
+
 @router.get("/", response_model=dict)
 async def get_treatments(
     skip: int = Query(0, ge=0, description="Number of records to skip"),
@@ -35,7 +40,7 @@ async def get_treatments(
     case_id: Optional[str] = Query(None, description="Filter by case ID"),
     treatment_name: Optional[str] = Query(None, description="Filter by treatment name"),
     treatment_type: Optional[str] = Query(None, description="Filter by treatment type"),
-    outcome: Optional[str] = Query(None, description="Filter by outcome")
+    outcome: Optional[str] = Query(None, description="Filter by outcome"),
 ):
     """Get all treatments with optional filtering"""
     try:
@@ -59,14 +64,12 @@ async def get_treatments(
             treatments = await treatment_service.get_all(skip, limit)
             total = await treatment_service.count()
 
-        return {
-            "data": treatments,
-            "total": total,
-            "skip": skip,
-            "limit": limit
-        }
+        return {"data": treatments, "total": total, "skip": skip, "limit": limit}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving treatments: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error retrieving treatments: {str(e)}"
+        )
+
 
 @router.get("/patient/{patient_id}", response_model=dict)
 async def get_treatments_by_patient(patient_id: str):
@@ -75,7 +78,10 @@ async def get_treatments_by_patient(patient_id: str):
         treatments = await treatment_service.get_by_patient_id(patient_id)
         return {"data": treatments, "count": len(treatments)}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving patient treatments: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error retrieving patient treatments: {str(e)}"
+        )
+
 
 @router.get("/case/{case_id}", response_model=dict)
 async def get_treatments_by_case(case_id: str):
@@ -84,7 +90,10 @@ async def get_treatments_by_case(case_id: str):
         treatments = await treatment_service.get_by_case_id(case_id)
         return {"data": treatments, "count": len(treatments)}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving case treatments: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error retrieving case treatments: {str(e)}"
+        )
+
 
 @router.get("/types/summary", response_model=dict)
 async def get_treatment_types_summary(patient_id: Optional[str] = None):
@@ -97,17 +106,21 @@ async def get_treatment_types_summary(patient_id: Optional[str] = None):
         # Aggregate treatment types
         pipeline = [
             {"$match": query},
-            {"$group": {
-                "_id": "$treatment_type",
-                "count": {"$sum": 1},
-                "treatments": {"$push": {
-                    "treatment_id": "$_id",
-                    "treatment_name": "$treatment_name",
-                    "treatment_date": "$treatment_date",
-                    "outcome": "$outcome"
-                }}
-            }},
-            {"$sort": {"count": -1}}
+            {
+                "$group": {
+                    "_id": "$treatment_type",
+                    "count": {"$sum": 1},
+                    "treatments": {
+                        "$push": {
+                            "treatment_id": "$_id",
+                            "treatment_name": "$treatment_name",
+                            "treatment_date": "$treatment_date",
+                            "outcome": "$outcome",
+                        }
+                    },
+                }
+            },
+            {"$sort": {"count": -1}},
         ]
 
         # Note: This is a simplified aggregation. In production, you'd use MongoDB's aggregation pipeline
@@ -118,21 +131,23 @@ async def get_treatment_types_summary(patient_id: Optional[str] = None):
         for treatment in all_treatments:
             t_type = treatment.get("treatment_type", "unknown")
             if t_type not in summary:
-                summary[t_type] = {
-                    "count": 0,
-                    "treatments": []
-                }
+                summary[t_type] = {"count": 0, "treatments": []}
             summary[t_type]["count"] += 1
-            summary[t_type]["treatments"].append({
-                "treatment_id": treatment["_id"],
-                "treatment_name": treatment["treatment_name"],
-                "treatment_date": treatment["treatment_date"],
-                "outcome": treatment.get("outcome")
-            })
+            summary[t_type]["treatments"].append(
+                {
+                    "treatment_id": treatment["_id"],
+                    "treatment_name": treatment["treatment_name"],
+                    "treatment_date": treatment["treatment_date"],
+                    "outcome": treatment.get("outcome"),
+                }
+            )
 
         return {"data": summary}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error getting treatment summary: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error getting treatment summary: {str(e)}"
+        )
+
 
 @router.put("/{treatment_id}", response_model=dict)
 async def update_treatment(treatment_id: str, treatment_update: dict):
@@ -144,12 +159,17 @@ async def update_treatment(treatment_id: str, treatment_update: dict):
             raise HTTPException(status_code=404, detail="Treatment not found")
 
         # Update the treatment
-        updated_treatment = await treatment_service.update(treatment_id, treatment_update)
+        updated_treatment = await treatment_service.update(
+            treatment_id, treatment_update
+        )
         return {"message": "Treatment updated successfully", "data": updated_treatment}
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error updating treatment: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error updating treatment: {str(e)}"
+        )
+
 
 @router.patch("/{treatment_id}/outcome", response_model=dict)
 async def update_treatment_outcome(treatment_id: str, outcome: str):
@@ -161,12 +181,17 @@ async def update_treatment_outcome(treatment_id: str, outcome: str):
             raise HTTPException(status_code=404, detail="Treatment not found")
 
         # Update only the outcome
-        updated_treatment = await treatment_service.update(treatment_id, {"outcome": outcome})
+        updated_treatment = await treatment_service.update(
+            treatment_id, {"outcome": outcome}
+        )
         return {"message": f"Treatment outcome updated", "data": updated_treatment}
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error updating treatment outcome: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error updating treatment outcome: {str(e)}"
+        )
+
 
 @router.delete("/{treatment_id}", response_model=dict)
 async def delete_treatment(treatment_id: str):
@@ -186,13 +211,16 @@ async def delete_treatment(treatment_id: str):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error deleting treatment: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error deleting treatment: {str(e)}"
+        )
+
 
 @router.get("/search/", response_model=dict)
 async def search_treatments(
     q: str = Query(..., description="Search query"),
     skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=1000)
+    limit: int = Query(100, ge=1, le=1000),
 ):
     """Search treatments by name, outcome, or notes"""
     try:
@@ -202,7 +230,7 @@ async def search_treatments(
                 {"treatment_name": {"$regex": q, "$options": "i"}},
                 {"outcome": {"$regex": q, "$options": "i"}},
                 {"notes": {"$regex": q, "$options": "i"}},
-                {"treatment_type": {"$regex": q, "$options": "i"}}
+                {"treatment_type": {"$regex": q, "$options": "i"}},
             ]
         }
 
@@ -214,7 +242,9 @@ async def search_treatments(
             "total": total,
             "query": q,
             "skip": skip,
-            "limit": limit
+            "limit": limit,
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error searching treatments: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error searching treatments: {str(e)}"
+        )

@@ -8,13 +8,16 @@ from bson import ObjectId
 from models.dianosis_models import Case, Test, Medicine, Diagnosis, Treatment
 import random
 
+
 # Helper function to generate ObjectId strings
 def generate_object_id():
     return str(ObjectId())
 
+
 # Helper function to create patient IDs
 def generate_patient_id(index):
     return f"PT{str(index).zfill(4)}"
+
 
 # Sample SOAP notes for different medical conditions
 SOAP_NOTES = [
@@ -22,22 +25,18 @@ SOAP_NOTES = [
 O: BP 140/90, HR 88, RR 18, Temp 37.1°C, O2 Sat 96%. Patient appears anxious and diaphoretic. Heart sounds regular, no murmurs. Lungs clear bilaterally.
 A: Acute chest pain, rule out acute coronary syndrome
 P: ECG, cardiac enzymes, chest X-ray, aspirin 325mg, IV access established""",
-
     """S: 32-year-old male with 3-day history of fever, cough, and fatigue. Reports temperature up to 39°C at home. Dry cough, no sputum production. No shortness of breath at rest.
 O: Temp 38.5°C, BP 110/70, HR 95, RR 16, O2 Sat 98%. Appears tired but not in distress. Throat erythematous, no exudate. Lungs clear to auscultation.
 A: Viral upper respiratory infection
 P: Supportive care, rest, fluids, acetaminophen for fever, return if worsening""",
-
     """S: 28-year-old female with 2-week history of polyuria, polydipsia, and unexplained weight loss (10 lbs). Family history of diabetes. Reports increased fatigue and blurred vision.
 O: BP 125/80, HR 82, RR 14, Weight 130 lbs (down from 140). Random glucose 285 mg/dL. No ketones in urine.
 A: New onset diabetes mellitus, likely Type 1
 P: Endocrinology consult, diabetes education, insulin initiation, HbA1c, autoantibodies""",
-
     """S: 55-year-old male presents with severe abdominal pain that started 6 hours ago. Pain is constant, 9/10, located in epigastrium, radiating to back. Nausea and vomiting x3.
 O: Temp 37.8°C, BP 150/95, HR 105, RR 20. Appears in significant distress. Abdomen tender in epigastrium, no rebound. Bowel sounds hypoactive.
 A: Acute pancreatitis, rule out gallstone pancreatitis
 P: NPO, IV fluids, pain control, lipase, amylase, CT abdomen, surgery consult""",
-
     """S: 38-year-old female with 1-week history of joint pain and morning stiffness lasting >1 hour. Bilateral hand and wrist pain, some swelling noted. Fatigue and low-grade fever.
 O: Temp 37.5°C, BP 118/75, HR 78. Bilateral MCP and PIP joint swelling and tenderness. Limited range of motion in wrists.
 A: Inflammatory arthritis, rule out rheumatoid arthritis
@@ -58,84 +57,147 @@ CONDITIONS = [
         "status": "in_progress",
         "tests": ["ECG", "Troponin I", "CK-MB", "Chest X-ray"],
         "medicines": [
-            {"name": "Aspirin", "dosage": "325mg", "route": "oral", "frequency": "once daily"},
-            {"name": "Metoprolol", "dosage": "50mg", "route": "oral", "frequency": "twice daily"}
+            {
+                "name": "Aspirin",
+                "dosage": "325mg",
+                "route": "oral",
+                "frequency": "once daily",
+            },
+            {
+                "name": "Metoprolol",
+                "dosage": "50mg",
+                "route": "oral",
+                "frequency": "twice daily",
+            },
         ],
         "diagnoses": [
-            {"name": "Acute Coronary Syndrome", "probability": 0.75, "status": "active"},
-            {"name": "Unstable Angina", "probability": 0.60, "status": "active"}
+            {
+                "name": "Acute Coronary Syndrome",
+                "probability": 0.75,
+                "status": "active",
+            },
+            {"name": "Unstable Angina", "probability": 0.60, "status": "active"},
         ],
         "treatments": [
             {"name": "Cardiac Catheterization", "type": "surgery"},
-            {"name": "Dual Antiplatelet Therapy", "type": "medication"}
-        ]
+            {"name": "Dual Antiplatelet Therapy", "type": "medication"},
+        ],
     },
     {
         "soap": SOAP_NOTES[1],
         "status": "closed",
         "tests": ["Rapid Strep Test", "CBC", "Throat Culture"],
         "medicines": [
-            {"name": "Acetaminophen", "dosage": "650mg", "route": "oral", "frequency": "every 6 hours"},
+            {
+                "name": "Acetaminophen",
+                "dosage": "650mg",
+                "route": "oral",
+                "frequency": "every 6 hours",
+            },
         ],
         "diagnoses": [
-            {"name": "Viral Upper Respiratory Infection", "probability": 0.90, "status": "resolved"}
+            {
+                "name": "Viral Upper Respiratory Infection",
+                "probability": 0.90,
+                "status": "resolved",
+            }
         ],
         "treatments": [
             {"name": "Supportive Care", "type": "lifestyle_change"},
-            {"name": "Rest and Hydration", "type": "lifestyle_change"}
-        ]
+            {"name": "Rest and Hydration", "type": "lifestyle_change"},
+        ],
     },
     {
         "soap": SOAP_NOTES[2],
         "status": "open",
-        "tests": ["HbA1c", "Fasting Glucose", "C-peptide", "GAD Antibodies", "Urinalysis"],
+        "tests": [
+            "HbA1c",
+            "Fasting Glucose",
+            "C-peptide",
+            "GAD Antibodies",
+            "Urinalysis",
+        ],
         "medicines": [
-            {"name": "Insulin Lispro", "dosage": "10 units", "route": "injection", "frequency": "before meals"},
-            {"name": "Metformin", "dosage": "500mg", "route": "oral", "frequency": "twice daily"}
+            {
+                "name": "Insulin Lispro",
+                "dosage": "10 units",
+                "route": "injection",
+                "frequency": "before meals",
+            },
+            {
+                "name": "Metformin",
+                "dosage": "500mg",
+                "route": "oral",
+                "frequency": "twice daily",
+            },
         ],
         "diagnoses": [
-            {"name": "Type 1 Diabetes Mellitus", "probability": 0.85, "status": "active"},
-            {"name": "Diabetic Ketoacidosis", "probability": 0.30, "status": "active"}
+            {
+                "name": "Type 1 Diabetes Mellitus",
+                "probability": 0.85,
+                "status": "active",
+            },
+            {"name": "Diabetic Ketoacidosis", "probability": 0.30, "status": "active"},
         ],
         "treatments": [
             {"name": "Insulin Therapy Initiation", "type": "medication"},
-            {"name": "Diabetes Education", "type": "therapy"}
-        ]
+            {"name": "Diabetes Education", "type": "therapy"},
+        ],
     },
     {
         "soap": SOAP_NOTES[3],
         "status": "in_progress",
         "tests": ["Lipase", "Amylase", "CT Abdomen", "CBC", "Liver Function Tests"],
         "medicines": [
-            {"name": "Morphine", "dosage": "4mg", "route": "injection", "frequency": "every 4 hours PRN"},
-            {"name": "Ondansetron", "dosage": "4mg", "route": "injection", "frequency": "every 8 hours"}
+            {
+                "name": "Morphine",
+                "dosage": "4mg",
+                "route": "injection",
+                "frequency": "every 4 hours PRN",
+            },
+            {
+                "name": "Ondansetron",
+                "dosage": "4mg",
+                "route": "injection",
+                "frequency": "every 8 hours",
+            },
         ],
         "diagnoses": [
             {"name": "Acute Pancreatitis", "probability": 0.80, "status": "active"},
-            {"name": "Gallstone Pancreatitis", "probability": 0.65, "status": "active"}
+            {"name": "Gallstone Pancreatitis", "probability": 0.65, "status": "active"},
         ],
         "treatments": [
             {"name": "NPO Management", "type": "lifestyle_change"},
-            {"name": "IV Fluid Resuscitation", "type": "therapy"}
-        ]
+            {"name": "IV Fluid Resuscitation", "type": "therapy"},
+        ],
     },
     {
         "soap": SOAP_NOTES[4],
         "status": "open",
         "tests": ["Rheumatoid Factor", "Anti-CCP", "ESR", "CRP", "Joint X-rays"],
         "medicines": [
-            {"name": "Ibuprofen", "dosage": "600mg", "route": "oral", "frequency": "three times daily"},
-            {"name": "Methotrexate", "dosage": "15mg", "route": "oral", "frequency": "weekly"}
+            {
+                "name": "Ibuprofen",
+                "dosage": "600mg",
+                "route": "oral",
+                "frequency": "three times daily",
+            },
+            {
+                "name": "Methotrexate",
+                "dosage": "15mg",
+                "route": "oral",
+                "frequency": "weekly",
+            },
         ],
         "diagnoses": [
             {"name": "Rheumatoid Arthritis", "probability": 0.70, "status": "active"},
-            {"name": "Inflammatory Arthritis", "probability": 0.85, "status": "active"}
+            {"name": "Inflammatory Arthritis", "probability": 0.85, "status": "active"},
         ],
         "treatments": [
             {"name": "DMARD Therapy", "type": "medication"},
-            {"name": "Physical Therapy", "type": "therapy"}
-        ]
-    }
+            {"name": "Physical Therapy", "type": "therapy"},
+        ],
+    },
 ]
 
 # Generate data for 20 patients
@@ -147,7 +209,9 @@ for i in range(1, 21):
 
     for case_num in range(num_cases):
         case_id = generate_object_id()
-        case_number = generate_object_id()  # Using ObjectId for case number as requested
+        case_number = (
+            generate_object_id()
+        )  # Using ObjectId for case number as requested
 
         # Select a random condition
         condition = random.choice(CONDITIONS)
@@ -165,7 +229,7 @@ for i in range(1, 21):
             status=condition["status"],
             notes=f"Additional notes for patient {patient_id}, case {case_num + 1}",
             created_at=case_date,
-            updated_at=case_date + timedelta(hours=random.randint(1, 48))
+            updated_at=case_date + timedelta(hours=random.randint(1, 48)),
         )
         MOCK_CASES.append(case)
 
@@ -177,11 +241,15 @@ for i in range(1, 21):
             # Generate mock test results
             test_results = []
             if test_name == "ECG":
-                test_results = [{"rhythm": "sinus", "rate": "88", "intervals": "normal"}]
+                test_results = [
+                    {"rhythm": "sinus", "rate": "88", "intervals": "normal"}
+                ]
             elif "Glucose" in test_name:
                 test_results = [{"value": random.randint(80, 300), "unit": "mg/dL"}]
             elif test_name in ["CBC", "CMP"]:
-                test_results = [{"wbc": "8.5", "rbc": "4.2", "hgb": "13.5", "hct": "40.2"}]
+                test_results = [
+                    {"wbc": "8.5", "rbc": "4.2", "hgb": "13.5", "hct": "40.2"}
+                ]
             else:
                 test_results = [{"result": "pending", "status": "in_progress"}]
 
@@ -194,7 +262,7 @@ for i in range(1, 21):
                 notes=f"Test ordered for {test_name}",
                 results=test_results,
                 created_at=test_date,
-                updated_at=test_date + timedelta(hours=2)
+                updated_at=test_date + timedelta(hours=2),
             )
             MOCK_TESTS.append(test)
 
@@ -212,10 +280,12 @@ for i in range(1, 21):
                 route=med_info["route"],
                 frequency=med_info["frequency"],
                 start_date=start_date,
-                end_date=start_date + timedelta(days=random.randint(7, 30)) if condition["status"] == "closed" else None,
+                end_date=start_date + timedelta(days=random.randint(7, 30))
+                if condition["status"] == "closed"
+                else None,
                 notes=f"Prescribed for {med_info['name']} therapy",
                 created_at=start_date,
-                updated_at=start_date + timedelta(hours=1)
+                updated_at=start_date + timedelta(hours=1),
             )
             MOCK_MEDICINES.append(medicine)
 
@@ -236,7 +306,7 @@ for i in range(1, 21):
                 follow_up="Follow up in 1-2 weeks or as needed",
                 additional_info=f"Confidence level: {diag_info['probability']*100:.0f}%",
                 created_at=diagnosis_date,
-                updated_at=diagnosis_date + timedelta(hours=2)
+                updated_at=diagnosis_date + timedelta(hours=2),
             )
             MOCK_DIAGNOSES.append(diagnosis)
 
@@ -255,7 +325,7 @@ for i in range(1, 21):
                 outcome="Ongoing" if condition["status"] != "closed" else "Improved",
                 notes=f"Treatment plan: {treat_info['name']}",
                 created_at=treatment_date,
-                updated_at=treatment_date + timedelta(hours=4)
+                updated_at=treatment_date + timedelta(hours=4),
             )
             MOCK_TREATMENTS.append(treatment)
 

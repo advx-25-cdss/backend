@@ -5,6 +5,7 @@ from services.ehr_service import menstrual_service
 
 router = APIRouter()
 
+
 @router.post("/", response_model=Menstrual)
 async def create_menstrual(menstrual: Menstrual):
     """Create new menstrual record"""
@@ -14,6 +15,7 @@ async def create_menstrual(menstrual: Menstrual):
         return Menstrual(**created_record)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.get("/{record_id}", response_model=Menstrual)
 async def get_menstrual(record_id: str):
@@ -26,6 +28,7 @@ async def get_menstrual(record_id: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/patient/{patient_id}", response_model=List[Menstrual])
 async def get_menstrual_by_patient(patient_id: str):
     """Get all menstrual records for a specific patient"""
@@ -35,10 +38,10 @@ async def get_menstrual_by_patient(patient_id: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/", response_model=List[Menstrual])
 async def get_all_menstrual(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=1000)
+    skip: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=1000)
 ):
     """Get all menstrual records with pagination"""
     try:
@@ -46,6 +49,7 @@ async def get_all_menstrual(
         return [Menstrual(**record) for record in records]
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.put("/{record_id}", response_model=Menstrual)
 async def update_menstrual(record_id: str, menstrual: Menstrual):
@@ -58,6 +62,7 @@ async def update_menstrual(record_id: str, menstrual: Menstrual):
         return Menstrual(**updated_record)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.delete("/{record_id}")
 async def delete_menstrual(record_id: str):

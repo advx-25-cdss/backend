@@ -4,6 +4,7 @@ from models.ehr_models import *
 from database import db
 from datetime import datetime, timezone
 
+
 class EHRService:
     def __init__(self, collection_name: str):
         self.collection_name = collection_name
@@ -49,10 +50,7 @@ class EHRService:
         # Remove None values and _id from update data
         update_data = {k: v for k, v in data.items() if v is not None and k != "_id"}
 
-        await self.collection.update_one(
-            {"_id": record_id},
-            {"$set": update_data}
-        )
+        await self.collection.update_one({"_id": record_id}, {"$set": update_data})
 
         return await self.collection.find_one({"_id": record_id})
 
@@ -71,6 +69,7 @@ class EHRService:
         if query is None:
             query = {}
         return await self.collection.count_documents(query)
+
 
 # Service instances for each collection
 demographics_service = EHRService("demographics")

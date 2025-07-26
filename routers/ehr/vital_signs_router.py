@@ -5,6 +5,7 @@ from services.ehr_service import vital_signs_service
 
 router = APIRouter()
 
+
 @router.post("/", response_model=VitalSigns)
 async def create_vital_signs(vs: VitalSigns):
     """Create new vital signs record"""
@@ -14,6 +15,7 @@ async def create_vital_signs(vs: VitalSigns):
         return VitalSigns(**created_record)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.get("/{record_id}", response_model=VitalSigns)
 async def get_vital_signs(record_id: str):
@@ -26,6 +28,7 @@ async def get_vital_signs(record_id: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/patient/{patient_id}", response_model=List[VitalSigns])
 async def get_vital_signs_by_patient(patient_id: str):
     """Get all vital signs records for a specific patient"""
@@ -35,10 +38,10 @@ async def get_vital_signs_by_patient(patient_id: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/", response_model=List[VitalSigns])
 async def get_all_vital_signs(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=1000)
+    skip: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=1000)
 ):
     """Get all vital signs records with pagination"""
     try:
@@ -46,6 +49,7 @@ async def get_all_vital_signs(
         return [VitalSigns(**record) for record in records]
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.put("/{record_id}", response_model=VitalSigns)
 async def update_vital_signs(record_id: str, vs: VitalSigns):
@@ -58,6 +62,7 @@ async def update_vital_signs(record_id: str, vs: VitalSigns):
         return VitalSigns(**updated_record)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.delete("/{record_id}")
 async def delete_vital_signs(record_id: str):

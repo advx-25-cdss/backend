@@ -9,6 +9,7 @@ diagnosis_service = DiagnosisService("diagnoses")
 
 router = APIRouter(prefix="/diagnoses", tags=["Diagnoses"])
 
+
 @router.post("/", response_model=dict)
 async def create_diagnosis(diagnosis: Diagnosis):
     """Create a new diagnosis"""
@@ -17,7 +18,10 @@ async def create_diagnosis(diagnosis: Diagnosis):
         created_diagnosis = await diagnosis_service.create(diagnosis_dict)
         return {"message": "Diagnosis created successfully", "data": created_diagnosis}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error creating diagnosis: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error creating diagnosis: {str(e)}"
+        )
+
 
 @router.get("/{diagnosis_id}", response_model=dict)
 async def get_diagnosis_by_id(diagnosis_id: str):
@@ -27,6 +31,7 @@ async def get_diagnosis_by_id(diagnosis_id: str):
         raise HTTPException(status_code=404, detail="Diagnosis not found")
     return {"data": diagnosis}
 
+
 @router.get("/", response_model=dict)
 async def get_diagnoses(
     skip: int = Query(0, ge=0, description="Number of records to skip"),
@@ -35,7 +40,7 @@ async def get_diagnoses(
     case_id: Optional[str] = Query(None, description="Filter by case ID"),
     diagnosis_name: Optional[str] = Query(None, description="Filter by diagnosis name"),
     status: Optional[str] = Query(None, description="Filter by diagnosis status"),
-    active_only: bool = Query(False, description="Show only active diagnoses")
+    active_only: bool = Query(False, description="Show only active diagnoses"),
 ):
     """Get all diagnoses with optional filtering"""
     try:
@@ -59,19 +64,17 @@ async def get_diagnoses(
             diagnoses = await diagnosis_service.get_all(skip, limit)
             total = await diagnosis_service.count()
 
-        return {
-            "data": diagnoses,
-            "total": total,
-            "skip": skip,
-            "limit": limit
-        }
+        return {"data": diagnoses, "total": total, "skip": skip, "limit": limit}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving diagnoses: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error retrieving diagnoses: {str(e)}"
+        )
+
 
 @router.get("/patient/{patient_id}", response_model=dict)
 async def get_diagnoses_by_patient(
     patient_id: str,
-    active_only: bool = Query(False, description="Show only active diagnoses")
+    active_only: bool = Query(False, description="Show only active diagnoses"),
 ):
     """Get all diagnoses for a specific patient"""
     try:
@@ -82,7 +85,10 @@ async def get_diagnoses_by_patient(
 
         return {"data": diagnoses, "count": len(diagnoses)}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving patient diagnoses: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error retrieving patient diagnoses: {str(e)}"
+        )
+
 
 @router.get("/case/{case_id}", response_model=dict)
 async def get_diagnoses_by_case(case_id: str):
@@ -91,13 +97,18 @@ async def get_diagnoses_by_case(case_id: str):
         diagnoses = await diagnosis_service.get_by_case_id(case_id)
         return {"data": diagnoses, "count": len(diagnoses)}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving case diagnoses: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error retrieving case diagnoses: {str(e)}"
+        )
+
 
 @router.get("/statistics/", response_model=dict)
 async def get_diagnosis_statistics(
     patient_id: Optional[str] = Query(None, description="Filter by patient ID"),
-    start_date: Optional[datetime] = Query(None, description="Start date for statistics"),
-    end_date: Optional[datetime] = Query(None, description="End date for statistics")
+    start_date: Optional[datetime] = Query(
+        None, description="Start date for statistics"
+    ),
+    end_date: Optional[datetime] = Query(None, description="End date for statistics"),
 ):
     """Get diagnosis statistics and summary"""
     try:
@@ -117,11 +128,17 @@ async def get_diagnosis_statistics(
         # Calculate statistics
         stats = {
             "total_diagnoses": len(all_diagnoses),
-            "active_count": len([d for d in all_diagnoses if d.get("status") == "active"]),
-            "resolved_count": len([d for d in all_diagnoses if d.get("status") == "resolved"]),
-            "recurrent_count": len([d for d in all_diagnoses if d.get("status") == "recurrent"]),
+            "active_count": len(
+                [d for d in all_diagnoses if d.get("status") == "active"]
+            ),
+            "resolved_count": len(
+                [d for d in all_diagnoses if d.get("status") == "resolved"]
+            ),
+            "recurrent_count": len(
+                [d for d in all_diagnoses if d.get("status") == "recurrent"]
+            ),
             "by_status": {},
-            "common_diagnoses": {}
+            "common_diagnoses": {},
         }
 
         # Group by status
@@ -131,11 +148,13 @@ async def get_diagnosis_statistics(
 
             if status not in stats["by_status"]:
                 stats["by_status"][status] = []
-            stats["by_status"][status].append({
-                "diagnosis_id": diagnosis["_id"],
-                "diagnosis_name": name,
-                "diagnosis_date": diagnosis["diagnosis_date"]
-            })
+            stats["by_status"][status].append(
+                {
+                    "diagnosis_id": diagnosis["_id"],
+                    "diagnosis_name": name,
+                    "diagnosis_date": diagnosis["diagnosis_date"],
+                }
+            )
 
             # Count common diagnoses
             if name not in stats["common_diagnoses"]:
@@ -149,7 +168,10 @@ async def get_diagnosis_statistics(
 
         return {"data": stats}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error getting diagnosis statistics: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error getting diagnosis statistics: {str(e)}"
+        )
+
 
 @router.put("/{diagnosis_id}", response_model=dict)
 async def update_diagnosis(diagnosis_id: str, diagnosis_update: dict):
@@ -161,23 +183,28 @@ async def update_diagnosis(diagnosis_id: str, diagnosis_update: dict):
             raise HTTPException(status_code=404, detail="Diagnosis not found")
 
         # Update the diagnosis
-        updated_diagnosis = await diagnosis_service.update(diagnosis_id, diagnosis_update)
+        updated_diagnosis = await diagnosis_service.update(
+            diagnosis_id, diagnosis_update
+        )
         return {"message": "Diagnosis updated successfully", "data": updated_diagnosis}
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error updating diagnosis: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error updating diagnosis: {str(e)}"
+        )
+
 
 @router.patch("/{diagnosis_id}/status", response_model=dict)
 async def update_diagnosis_status(diagnosis_id: str, status: str):
     """Update diagnosis status"""
     try:
         # Validate status
-        valid_statuses = ['active', 'resolved', 'recurrent']
+        valid_statuses = ["active", "resolved", "recurrent"]
         if status not in valid_statuses:
             raise HTTPException(
                 status_code=400,
-                detail=f"Invalid status. Must be one of: {', '.join(valid_statuses)}"
+                detail=f"Invalid status. Must be one of: {', '.join(valid_statuses)}",
             )
 
         # Check if diagnosis exists
@@ -186,12 +213,20 @@ async def update_diagnosis_status(diagnosis_id: str, status: str):
             raise HTTPException(status_code=404, detail="Diagnosis not found")
 
         # Update only the status
-        updated_diagnosis = await diagnosis_service.update(diagnosis_id, {"status": status})
-        return {"message": f"Diagnosis status updated to '{status}'", "data": updated_diagnosis}
+        updated_diagnosis = await diagnosis_service.update(
+            diagnosis_id, {"status": status}
+        )
+        return {
+            "message": f"Diagnosis status updated to '{status}'",
+            "data": updated_diagnosis,
+        }
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error updating diagnosis status: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error updating diagnosis status: {str(e)}"
+        )
+
 
 @router.patch("/{diagnosis_id}/follow-up", response_model=dict)
 async def update_diagnosis_follow_up(diagnosis_id: str, follow_up: str):
@@ -203,12 +238,17 @@ async def update_diagnosis_follow_up(diagnosis_id: str, follow_up: str):
             raise HTTPException(status_code=404, detail="Diagnosis not found")
 
         # Update follow-up
-        updated_diagnosis = await diagnosis_service.update(diagnosis_id, {"follow_up": follow_up})
+        updated_diagnosis = await diagnosis_service.update(
+            diagnosis_id, {"follow_up": follow_up}
+        )
         return {"message": "Diagnosis follow-up updated", "data": updated_diagnosis}
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error updating diagnosis follow-up: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error updating diagnosis follow-up: {str(e)}"
+        )
+
 
 @router.delete("/{diagnosis_id}", response_model=dict)
 async def delete_diagnosis(diagnosis_id: str):
@@ -228,13 +268,16 @@ async def delete_diagnosis(diagnosis_id: str):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error deleting diagnosis: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error deleting diagnosis: {str(e)}"
+        )
+
 
 @router.get("/search/", response_model=dict)
 async def search_diagnoses(
     q: str = Query(..., description="Search query"),
     skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=1000)
+    limit: int = Query(100, ge=1, le=1000),
 ):
     """Search diagnoses by name, follow-up, or notes"""
     try:
@@ -244,7 +287,7 @@ async def search_diagnoses(
                 {"diagnosis_name": {"$regex": q, "$options": "i"}},
                 {"follow_up": {"$regex": q, "$options": "i"}},
                 {"notes": {"$regex": q, "$options": "i"}},
-                {"additional_info": {"$regex": q, "$options": "i"}}
+                {"additional_info": {"$regex": q, "$options": "i"}},
             ]
         }
 
@@ -256,7 +299,9 @@ async def search_diagnoses(
             "total": total,
             "query": q,
             "skip": skip,
-            "limit": limit
+            "limit": limit,
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error searching diagnoses: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error searching diagnoses: {str(e)}"
+        )

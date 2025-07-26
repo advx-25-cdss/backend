@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional, List, Literal
 from datetime import datetime, date, timezone
 
+
 class Demographics(BaseModel):
     _id: str
     patient_id: str
@@ -21,6 +22,7 @@ class Demographics(BaseModel):
     class Config:
         allow_population_by_field_name = True
 
+
 class Menstrual(BaseModel):
     _id: str
     patient_id: str
@@ -37,6 +39,7 @@ class Menstrual(BaseModel):
 
     class Config:
         allow_population_by_field_name = True
+
 
 class Obstetric(BaseModel):
     _id: str
@@ -57,10 +60,13 @@ class Obstetric(BaseModel):
     class Config:
         allow_population_by_field_name = True
 
+
 class Marital(BaseModel):
     _id: str
     patient_id: str
-    marital_status: Literal["single", "married", "divorced", "widowed", "separated"]  # "single", "married", "divorced", "widowed", "separated"
+    marital_status: Literal[
+        "single", "married", "divorced", "widowed", "separated"
+    ]  # "single", "married", "divorced", "widowed", "separated"
     spouse_name: Optional[str] = None
     marriage_date: Optional[datetime] = None
     number_of_children: Optional[int] = None
@@ -72,6 +78,7 @@ class Marital(BaseModel):
 
     class Config:
         allow_population_by_field_name = True
+
 
 class HistoryPresentIllness(BaseModel):
     _id: str
@@ -98,9 +105,15 @@ class HistoryPresentIllness(BaseModel):
 class PastMedicalHistory(BaseModel):
     _id: str
     patient_id: str
-    medical_conditions: Optional[List[dict]] = None  # [{"condition": str, "diagnosed_date": date, "status": str}]
-    surgeries: Optional[List[dict]] = None  # [{"surgery": str, "date": date, "hospital": str}]
-    hospitalizations: Optional[List[dict]] = None  # [{"reason": str, "date": date, "duration": int}]
+    medical_conditions: Optional[List[dict]] = (
+        None  # [{"condition": str, "diagnosed_date": date, "status": str}]
+    )
+    surgeries: Optional[List[dict]] = (
+        None  # [{"surgery": str, "date": date, "hospital": str}]
+    )
+    hospitalizations: Optional[List[dict]] = (
+        None  # [{"reason": str, "date": date, "duration": int}]
+    )
     chronic_diseases: Optional[List[str]] = None
     immunizations: Optional[List[dict]] = None  # [{"vaccine": str, "date": date}]
     notes: Optional[str] = None
@@ -110,10 +123,13 @@ class PastMedicalHistory(BaseModel):
     class Config:
         allow_population_by_field_name = True
 
+
 class FamilyHistory(BaseModel):
     _id: str
     patient_id: str
-    maternal_history: Optional[List[dict]] = None  # [{"condition": str, "relative": str, "age_of_onset": int}]
+    maternal_history: Optional[List[dict]] = (
+        None  # [{"condition": str, "relative": str, "age_of_onset": int}]
+    )
     paternal_history: Optional[List[dict]] = None
     siblings_history: Optional[List[dict]] = None
     children_history: Optional[List[dict]] = None
@@ -128,10 +144,13 @@ class FamilyHistory(BaseModel):
     class Config:
         allow_population_by_field_name = True
 
+
 class MedicationHistory(BaseModel):
     _id: str
     patient_id: str
-    current_medications: Optional[List[dict]] = None  # [{"name": str, "dosage": str, "frequency": str, "start_date": date}]
+    current_medications: Optional[List[dict]] = (
+        None  # [{"name": str, "dosage": str, "frequency": str, "start_date": date}]
+    )
     past_medications: Optional[List[dict]] = None
     over_the_counter: Optional[List[dict]] = None
     supplements: Optional[List[dict]] = None
@@ -144,10 +163,13 @@ class MedicationHistory(BaseModel):
     class Config:
         allow_population_by_field_name = True
 
+
 class AllergyHistory(BaseModel):
     _id: str
     patient_id: str
-    drug_allergies: Optional[List[dict]] = None  # [{"drug": str, "reaction": str, "severity": str}]
+    drug_allergies: Optional[List[dict]] = (
+        None  # [{"drug": str, "reaction": str, "severity": str}]
+    )
     food_allergies: Optional[List[dict]] = None
     environmental_allergies: Optional[List[dict]] = None
     latex_allergy: Optional[bool] = None
@@ -159,6 +181,7 @@ class AllergyHistory(BaseModel):
 
     class Config:
         allow_population_by_field_name = True
+
 
 class SocialHistory(BaseModel):
     _id: str
@@ -182,6 +205,7 @@ class SocialHistory(BaseModel):
     class Config:
         allow_population_by_field_name = True
 
+
 class VitalSigns(BaseModel):
     _id: str
     patient_id: str
@@ -194,7 +218,9 @@ class VitalSigns(BaseModel):
     height: Optional[float] = None  # cm
     weight: Optional[float] = None  # kg
     pain_scale: Optional[int] = None  # 0-10
-    measurement_date: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    measurement_date: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc)
+    )
     notes: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

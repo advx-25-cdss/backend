@@ -6,6 +6,7 @@ from datetime import datetime
 
 router = APIRouter(prefix="/cases", tags=["Cases"])
 
+
 @router.post("/", response_model=dict)
 async def create_case(case: Case):
     """Create a new case"""
@@ -16,6 +17,7 @@ async def create_case(case: Case):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error creating case: {str(e)}")
 
+
 @router.get("/{case_id}", response_model=dict)
 async def get_case_by_id(case_id: str):
     """Get a case by ID"""
@@ -24,13 +26,14 @@ async def get_case_by_id(case_id: str):
         raise HTTPException(status_code=404, detail="Case not found")
     return {"data": case}
 
+
 @router.get("/", response_model=dict)
 async def get_cases(
     skip: int = Query(0, ge=0, description="Number of records to skip"),
     limit: int = Query(100, ge=1, le=1000, description="Number of records to return"),
     patient_id: Optional[str] = Query(None, description="Filter by patient ID"),
     status: Optional[str] = Query(None, description="Filter by case status"),
-    case_number: Optional[str] = Query(None, description="Filter by case number")
+    case_number: Optional[str] = Query(None, description="Filter by case number"),
 ):
     """Get all cases with optional filtering"""
     try:
@@ -50,14 +53,10 @@ async def get_cases(
             cases = await case_service.get_all(skip, limit)
             total = await case_service.count()
 
-        return {
-            "data": cases,
-            "total": total,
-            "skip": skip,
-            "limit": limit
-        }
+        return {"data": cases, "total": total, "skip": skip, "limit": limit}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving cases: {str(e)}")
+
 
 @router.get("/patient/{patient_id}", response_model=dict)
 async def get_cases_by_patient(patient_id: str):
@@ -66,7 +65,10 @@ async def get_cases_by_patient(patient_id: str):
         cases = await case_service.get_by_patient_id(patient_id)
         return {"data": cases, "count": len(cases)}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error retrieving patient cases: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error retrieving patient cases: {str(e)}"
+        )
+
 
 @router.put("/{case_id}", response_model=dict)
 async def update_case(case_id: str, case_update: dict):
@@ -85,16 +87,17 @@ async def update_case(case_id: str, case_update: dict):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error updating case: {str(e)}")
 
+
 @router.patch("/{case_id}/status", response_model=dict)
 async def update_case_status(case_id: str, status: str):
     """Update case status"""
     try:
         # Validate status
-        valid_statuses = ['open', 'closed', 'in_progress']
+        valid_statuses = ["open", "closed", "in_progress"]
         if status not in valid_statuses:
             raise HTTPException(
                 status_code=400,
-                detail=f"Invalid status. Must be one of: {', '.join(valid_statuses)}"
+                detail=f"Invalid status. Must be one of: {', '.join(valid_statuses)}",
             )
 
         # Check if case exists
@@ -108,7 +111,10 @@ async def update_case_status(case_id: str, status: str):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error updating case status: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error updating case status: {str(e)}"
+        )
+
 
 @router.delete("/{case_id}", response_model=dict)
 async def delete_case(case_id: str):
@@ -130,11 +136,12 @@ async def delete_case(case_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error deleting case: {str(e)}")
 
+
 @router.get("/search/", response_model=dict)
 async def search_cases(
     q: str = Query(..., description="Search query"),
     skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=1000)
+    limit: int = Query(100, ge=1, le=1000),
 ):
     """Search cases by SOAP notes, case number, or notes"""
     try:
@@ -144,19 +151,13 @@ async def search_cases(
                 {"soap": {"$regex": q, "$options": "i"}},
                 {"case_number": {"$regex": q, "$options": "i"}},
                 {"notes": {"$regex": q, "$options": "i"}},
-                {"transcriptions": {"$regex": q, "$options": "i"}}
+                {"transcriptions": {"$regex": q, "$options": "i"}},
             ]
         }
 
         cases = await case_service.search(query, skip, limit)
         total = await case_service.count(query)
 
-        return {
-            "data": cases,
-            "total": total,
-            "query": q,
-            "skip": skip,
-            "limit": limit
-        }
+        return {"data": cases, "total": total, "query": q, "skip": skip, "limit": limit}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error searching cases: {str(e)}")

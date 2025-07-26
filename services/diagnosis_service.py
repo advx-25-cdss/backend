@@ -1,10 +1,9 @@
 from typing import List, Optional
-
 from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorCollection
-from models.dianosis_models import Case, Test, Medicine
 from database import db
 from datetime import datetime, timezone
+
 
 class DiagnosisService:
     def __init__(self, collection_name: str):
@@ -28,6 +27,9 @@ class DiagnosisService:
 
         await self.collection.insert_one(data)
         created_record = await self.collection.find_one({"_id": data["_id"]})
+        created_record["_id"] = str(
+            created_record["_id"]
+        )  # Convert ObjectId to string for JSON serialization
         return created_record
 
     async def get_by_id(self, record_id: str) -> Optional[dict]:
@@ -65,10 +67,7 @@ class DiagnosisService:
         # Remove None values and _id from update data
         update_data = {k: v for k, v in data.items() if v is not None and k != "_id"}
 
-        await self.collection.update_one(
-            {"_id": record_id},
-            {"$set": update_data}
-        )
+        await self.collection.update_one({"_id": record_id}, {"$set": update_data})
 
         return await self.collection.find_one({"_id": record_id})
 
@@ -87,6 +86,7 @@ class DiagnosisService:
         if query is None:
             query = {}
         return await self.collection.count_documents(query)
+
 
 # Service instances for each diagnosis collection
 case_service = DiagnosisService("cases")

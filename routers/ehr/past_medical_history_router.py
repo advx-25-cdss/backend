@@ -5,6 +5,7 @@ from services.ehr_service import past_medical_history_service
 
 router = APIRouter()
 
+
 @router.post("/", response_model=PastMedicalHistory)
 async def create_past_medical_history(pmh: PastMedicalHistory):
     """Create new past medical history record"""
@@ -15,16 +16,20 @@ async def create_past_medical_history(pmh: PastMedicalHistory):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/{record_id}", response_model=PastMedicalHistory)
 async def get_past_medical_history(record_id: str):
     """Get past medical history record by ID"""
     try:
         record = await past_medical_history_service.get_by_id(record_id)
         if not record:
-            raise HTTPException(status_code=404, detail="Past medical history record not found")
+            raise HTTPException(
+                status_code=404, detail="Past medical history record not found"
+            )
         return PastMedicalHistory(**record)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.get("/patient/{patient_id}", response_model=List[PastMedicalHistory])
 async def get_past_medical_history_by_patient(patient_id: str):
@@ -35,10 +40,10 @@ async def get_past_medical_history_by_patient(patient_id: str):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/", response_model=List[PastMedicalHistory])
 async def get_all_past_medical_history(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=1000)
+    skip: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=1000)
 ):
     """Get all past medical history records with pagination"""
     try:
@@ -47,6 +52,7 @@ async def get_all_past_medical_history(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.put("/{record_id}", response_model=PastMedicalHistory)
 async def update_past_medical_history(record_id: str, pmh: PastMedicalHistory):
     """Update past medical history record"""
@@ -54,10 +60,13 @@ async def update_past_medical_history(record_id: str, pmh: PastMedicalHistory):
         pmh_dict = pmh.dict(by_alias=True, exclude_unset=True)
         updated_record = await past_medical_history_service.update(record_id, pmh_dict)
         if not updated_record:
-            raise HTTPException(status_code=404, detail="Past medical history record not found")
+            raise HTTPException(
+                status_code=404, detail="Past medical history record not found"
+            )
         return PastMedicalHistory(**updated_record)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.delete("/{record_id}")
 async def delete_past_medical_history(record_id: str):
@@ -65,7 +74,9 @@ async def delete_past_medical_history(record_id: str):
     try:
         deleted = await past_medical_history_service.delete(record_id)
         if not deleted:
-            raise HTTPException(status_code=404, detail="Past medical history record not found")
+            raise HTTPException(
+                status_code=404, detail="Past medical history record not found"
+            )
         return {"message": "Past medical history record deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

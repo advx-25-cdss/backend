@@ -5,14 +5,18 @@ from openai import OpenAI
 from pydantic import BaseModel, ValidationError
 from dotenv import load_dotenv
 
+
 # --- 1. Pydantic Models for Structured Output ---
 class Test(BaseModel):
     """A single recommended diagnostic test."""
+
     test_name: str
     notes: Optional[str] = None
 
+
 class TestRecommendations(BaseModel):
     """A list of recommended tests."""
+
     recommendations: List[Test]
 
 
@@ -48,60 +52,30 @@ def get_test_recommendations(transcription: str) -> Optional[TestRecommendations
 
     **Output Format:**
     You MUST respond with a valid JSON object that strictly adheres to the following Pydantic models. Do not add any explanatory text outside of the JSON structure.
-
-    ```python
-    from pydantic import BaseModel, Field
-    from typing import List, Optional
-
-    class Test(BaseModel):
-        test_name: str
-        notes: Optional[str] = None
-
-    class TestRecommendations(BaseModel):
-        recommendations: List[Test]
-    ```
-
-    **Example JSON Output:**
-    {{
-      "recommendations": [
-        {{
-          "test_name": "心电图 (ECG)",
-          "notes": "评估是否存在心肌缺血、心律失常等心脏问题，是胸痛病人的首要检查。"
-        }},
-        {{
-          "test_name": "心肌酶谱 (Cardiac Enzymes)",
-          "notes": "检测心肌损伤标志物，用于排除或确认急性心肌梗死。"
-        }}
-      ]
-    }}
     """
 
     try:
         print("Requesting test recommendations from OpenAI...")
-        response = client.chat.completions.create(
-            model="gpt-4o", 
-            response_format={"type": "json_object"}, # Enforce JSON output
+        response = client.chat.completions.parse(
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": f"Here is the transcription:\n\n---\n{transcription}\n---"}
-            ]
+                {
+                    "role": "user",
+                    "content": f"Here is the transcription:\n\n---\n{transcription}\n---",
+                },
+            ],
+            response_format=TestRecommendations,  # Enforce JSON output
         )
 
         response_content = response.choices[0].message.content
         print("Received raw response from OpenAI.")
 
-
-        """
-        
-        Here response_content is the json string that we need to parse and send to the front end.
-        
-        """
-
         # --- 3. Parsing and Validation with Pydantic ---
         # This ensures the AI's output matches our desired structure.
         parsed_json = json.loads(response_content)
         validated_recommendations = TestRecommendations.model_validate(parsed_json)
-        
+
         print("Successfully parsed and validated the recommendations.")
         return validated_recommendations
 
@@ -120,7 +94,6 @@ def get_test_recommendations(transcription: str) -> Optional[TestRecommendations
 
 # --- 4. Example Usage ---
 if __name__ == "__main__":
-
     sample_transcription = """
     医生: "李女士，您好，请问您哪里不舒服？"
     患者: "医生，我...我从今天早上开始，胸口这里就特别疼，是那种压着的感觉，喘不过气来。"

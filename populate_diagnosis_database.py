@@ -7,13 +7,17 @@ import asyncio
 import logging
 from database import connect_to_mongo, close_mongo_connection, db
 from mock_diagnosis_data import (
-    MOCK_CASES, MOCK_TESTS, MOCK_MEDICINES,
-    MOCK_DIAGNOSES, MOCK_TREATMENTS
+    MOCK_CASES,
+    MOCK_TESTS,
+    MOCK_MEDICINES,
+    MOCK_DIAGNOSES,
+    MOCK_TREATMENTS,
 )
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 async def populate_diagnosis_collections():
     """Populate all diagnosis-related collections with mock data."""
@@ -90,9 +94,13 @@ async def populate_diagnosis_collections():
 
         # Show sample patient data
         logger.info("\n=== Sample Patient Data ===")
-        sample_cases = await cases_collection.find({"patient_id": "PT0001"}).to_list(length=5)
+        sample_cases = await cases_collection.find({"patient_id": "PT0001"}).to_list(
+            length=5
+        )
         for case in sample_cases:
-            logger.info(f"Patient PT0001 - Case: {case['case_number'][:8]}... Status: {case['status']}")
+            logger.info(
+                f"Patient PT0001 - Case: {case['case_number'][:8]}... Status: {case['status']}"
+            )
 
     except Exception as e:
         logger.error(f"Error populating database: {e}")
@@ -102,6 +110,7 @@ async def populate_diagnosis_collections():
         # Close database connection
         await close_mongo_connection()
         logger.info("Database connection closed")
+
 
 async def populate_specific_patient(patient_id: str):
     """Populate data for a specific patient only."""
@@ -113,9 +122,19 @@ async def populate_specific_patient(patient_id: str):
         # Filter data for specific patient
         patient_cases = [case for case in MOCK_CASES if case.patient_id == patient_id]
         patient_tests = [test for test in MOCK_TESTS if test.patient_id == patient_id]
-        patient_medicines = [medicine for medicine in MOCK_MEDICINES if medicine.patient_id == patient_id]
-        patient_diagnoses = [diagnosis for diagnosis in MOCK_DIAGNOSES if diagnosis.patient_id == patient_id]
-        patient_treatments = [treatment for treatment in MOCK_TREATMENTS if treatment.patient_id == patient_id]
+        patient_medicines = [
+            medicine for medicine in MOCK_MEDICINES if medicine.patient_id == patient_id
+        ]
+        patient_diagnoses = [
+            diagnosis
+            for diagnosis in MOCK_DIAGNOSES
+            if diagnosis.patient_id == patient_id
+        ]
+        patient_treatments = [
+            treatment
+            for treatment in MOCK_TREATMENTS
+            if treatment.patient_id == patient_id
+        ]
 
         # Get collections
         cases_collection = db.cdss.cases
@@ -130,11 +149,17 @@ async def populate_specific_patient(patient_id: str):
         if patient_tests:
             await tests_collection.insert_many([test.dict() for test in patient_tests])
         if patient_medicines:
-            await medicines_collection.insert_many([medicine.dict() for medicine in patient_medicines])
+            await medicines_collection.insert_many(
+                [medicine.dict() for medicine in patient_medicines]
+            )
         if patient_diagnoses:
-            await diagnoses_collection.insert_many([diagnosis.dict() for diagnosis in patient_diagnoses])
+            await diagnoses_collection.insert_many(
+                [diagnosis.dict() for diagnosis in patient_diagnoses]
+            )
         if patient_treatments:
-            await treatments_collection.insert_many([treatment.dict() for treatment in patient_treatments])
+            await treatments_collection.insert_many(
+                [treatment.dict() for treatment in patient_treatments]
+            )
 
         logger.info(f"Successfully populated data for {patient_id}")
         logger.info(f"- Cases: {len(patient_cases)}")
@@ -149,6 +174,7 @@ async def populate_specific_patient(patient_id: str):
 
     finally:
         await close_mongo_connection()
+
 
 if __name__ == "__main__":
     # Run the population script

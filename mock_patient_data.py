@@ -5,14 +5,23 @@ This file contains 20 diverse patients with comprehensive medical records.
 
 from datetime import datetime
 from models.ehr_models import (
-    Demographics, Menstrual, Obstetric, Marital,
-    PastMedicalHistory, FamilyHistory, MedicationHistory, AllergyHistory,
-    SocialHistory, VitalSigns
+    Demographics,
+    Menstrual,
+    Obstetric,
+    Marital,
+    PastMedicalHistory,
+    FamilyHistory,
+    MedicationHistory,
+    AllergyHistory,
+    SocialHistory,
+    VitalSigns,
 )
+
 
 # Helper function to create patient IDs
 def generate_patient_id(index):
     return f"PT{str(index).zfill(4)}"
+
 
 # Mock data for 20 diverse patients
 MOCK_PATIENTS = [
@@ -29,7 +38,7 @@ MOCK_PATIENTS = [
             address="1234 Maple Street, Los Angeles, CA 90210",
             emergency_contact_name="Carlos Rodriguez",
             emergency_contact_phone="+1-555-0102",
-            insurance_info="Blue Cross Blue Shield - Policy #BC123456"
+            insurance_info="Blue Cross Blue Shield - Policy #BC123456",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -42,7 +51,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=98.5,
             height=165.0,
             weight=65.0,
-            pain_scale=0
+            pain_scale=0,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -54,7 +63,7 @@ MOCK_PATIENTS = [
             education_level="Bachelor's Degree",
             exercise_frequency="3-4 times per week",
             diet_type="Mediterranean",
-            living_situation="Lives with spouse and 2 children"
+            living_situation="Lives with spouse and 2 children",
         ),
         "menstrual": Menstrual(
             _id="",
@@ -64,7 +73,7 @@ MOCK_PATIENTS = [
             flow_duration=5,
             flow_intensity="normal",
             cycle_regularity="regular",
-            contraceptive_method="Birth control pills"
+            contraceptive_method="Birth control pills",
         ),
         "marital": Marital(
             _id="",
@@ -73,8 +82,8 @@ MOCK_PATIENTS = [
             spouse_name="Carlos Rodriguez",
             marriage_date=datetime(2010, 6, 20),
             number_of_children=2,
-            family_support_system="Strong family support"
-        )
+            family_support_system="Strong family support",
+        ),
     },
     {
         "demographics": Demographics(
@@ -89,7 +98,7 @@ MOCK_PATIENTS = [
             address="567 Oak Avenue, Atlanta, GA 30309",
             emergency_contact_name="Sarah Washington",
             emergency_contact_phone="+1-555-0202",
-            insurance_info="Aetna - Policy #AE789012"
+            insurance_info="Aetna - Policy #AE789012",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -102,7 +111,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=97.8,
             height=180.0,
             weight=85.0,
-            pain_scale=2
+            pain_scale=2,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -115,16 +124,24 @@ MOCK_PATIENTS = [
             education_level="High School Diploma",
             exercise_frequency="2-3 times per week",
             diet_type="Standard American",
-            living_situation="Lives with spouse"
+            living_situation="Lives with spouse",
         ),
         "past_medical_history": PastMedicalHistory(
             _id="",
             patient_id="PT0002",
             medical_conditions=[
-                {"condition": "Hypertension", "diagnosed_date": datetime(2020, 5, 15), "status": "active"},
-                {"condition": "Type 2 Diabetes", "diagnosed_date": datetime(2018, 8, 22), "status": "active"}
+                {
+                    "condition": "Hypertension",
+                    "diagnosed_date": datetime(2020, 5, 15),
+                    "status": "active",
+                },
+                {
+                    "condition": "Type 2 Diabetes",
+                    "diagnosed_date": datetime(2018, 8, 22),
+                    "status": "active",
+                },
             ],
-            chronic_diseases=["Hypertension", "Type 2 Diabetes"]
+            chronic_diseases=["Hypertension", "Type 2 Diabetes"],
         ),
         "marital": Marital(
             _id="",
@@ -133,8 +150,8 @@ MOCK_PATIENTS = [
             spouse_name="Sarah Washington",
             marriage_date=datetime(1995, 9, 12),
             number_of_children=3,
-            family_support_system="Strong family support"
-        )
+            family_support_system="Strong family support",
+        ),
     },
     {
         "demographics": Demographics(
@@ -149,7 +166,7 @@ MOCK_PATIENTS = [
             address="890 Cherry Blossom Lane, San Francisco, CA 94102",
             emergency_contact_name="Hiroshi Tanaka",
             emergency_contact_phone="+1-555-0302",
-            insurance_info="Kaiser Permanente - Policy #KP345678"
+            insurance_info="Kaiser Permanente - Policy #KP345678",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -162,7 +179,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=99.2,
             height=155.0,
             weight=52.0,
-            pain_scale=0
+            pain_scale=0,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -174,7 +191,7 @@ MOCK_PATIENTS = [
             education_level="Master's Degree",
             exercise_frequency="Daily yoga and walking",
             diet_type="Vegetarian",
-            living_situation="Lives alone"
+            living_situation="Lives alone",
         ),
         "menstrual": Menstrual(
             _id="",
@@ -184,15 +201,15 @@ MOCK_PATIENTS = [
             flow_duration=4,
             flow_intensity="light",
             cycle_regularity="regular",
-            contraceptive_method="None"
+            contraceptive_method="None",
         ),
         "marital": Marital(
             _id="",
             patient_id="PT0003",
             marital_status="single",
             number_of_children=0,
-            family_support_system="Close family relationships"
-        )
+            family_support_system="Close family relationships",
+        ),
     },
     {
         "demographics": Demographics(
@@ -207,7 +224,7 @@ MOCK_PATIENTS = [
             address="456 Desert Rose Drive, Phoenix, AZ 85001",
             emergency_contact_name="Fatima Al-Hassan",
             emergency_contact_phone="+1-555-0402",
-            insurance_info="Cigna - Policy #CG901234"
+            insurance_info="Cigna - Policy #CG901234",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -220,7 +237,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=98.0,
             height=175.0,
             weight=78.0,
-            pain_scale=1
+            pain_scale=1,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -232,7 +249,7 @@ MOCK_PATIENTS = [
             education_level="PhD",
             exercise_frequency="Walking daily",
             diet_type="Halal",
-            living_situation="Lives with spouse and children"
+            living_situation="Lives with spouse and children",
         ),
         "family_history": FamilyHistory(
             _id="",
@@ -242,7 +259,7 @@ MOCK_PATIENTS = [
             ],
             maternal_history=[
                 {"condition": "Diabetes", "relative": "Mother", "age_of_onset": 55}
-            ]
+            ],
         ),
         "marital": Marital(
             _id="",
@@ -251,8 +268,8 @@ MOCK_PATIENTS = [
             spouse_name="Fatima Al-Hassan",
             marriage_date=datetime(1990, 8, 15),
             number_of_children=4,
-            family_support_system="Extended family support"
-        )
+            family_support_system="Extended family support",
+        ),
     },
     {
         "demographics": Demographics(
@@ -267,7 +284,7 @@ MOCK_PATIENTS = [
             address="123 Shamrock Street, Boston, MA 02101",
             emergency_contact_name="Patrick O'Connor",
             emergency_contact_phone="+1-555-0502",
-            insurance_info="Harvard Pilgrim - Policy #HP567890"
+            insurance_info="Harvard Pilgrim - Policy #HP567890",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -280,7 +297,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=99.0,
             height=170.0,
             weight=58.0,
-            pain_scale=0
+            pain_scale=0,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -292,7 +309,7 @@ MOCK_PATIENTS = [
             education_level="Graduate Student",
             exercise_frequency="5-6 times per week",
             diet_type="Balanced",
-            living_situation="Lives with roommates"
+            living_situation="Lives with roommates",
         ),
         "allergy_history": AllergyHistory(
             _id="",
@@ -302,15 +319,15 @@ MOCK_PATIENTS = [
             ],
             food_allergies=[
                 {"food": "Shellfish", "reaction": "Hives", "severity": "moderate"}
-            ]
+            ],
         ),
         "marital": Marital(
             _id="",
             patient_id="PT0005",
             marital_status="single",
             number_of_children=0,
-            family_support_system="Strong family support"
-        )
+            family_support_system="Strong family support",
+        ),
     },
     {
         "demographics": Demographics(
@@ -325,7 +342,7 @@ MOCK_PATIENTS = [
             address="789 Pine Street, Seattle, WA 98101",
             emergency_contact_name="Margaret Johnson",
             emergency_contact_phone="+1-555-0602",
-            insurance_info="Medicare - Policy #MC123789"
+            insurance_info="Medicare - Policy #MC123789",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -338,7 +355,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=96.5,
             height=178.0,
             weight=92.0,
-            pain_scale=4
+            pain_scale=4,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -352,18 +369,30 @@ MOCK_PATIENTS = [
             education_level="High School Diploma",
             exercise_frequency="Light walking",
             diet_type="Standard",
-            living_situation="Lives with spouse"
+            living_situation="Lives with spouse",
         ),
         "past_medical_history": PastMedicalHistory(
             _id="",
             patient_id="PT0006",
             medical_conditions=[
-                {"condition": "COPD", "diagnosed_date": datetime(2019, 3, 10), "status": "active"},
-                {"condition": "Arthritis", "diagnosed_date": datetime(2015, 6, 5), "status": "active"}
+                {
+                    "condition": "COPD",
+                    "diagnosed_date": datetime(2019, 3, 10),
+                    "status": "active",
+                },
+                {
+                    "condition": "Arthritis",
+                    "diagnosed_date": datetime(2015, 6, 5),
+                    "status": "active",
+                },
             ],
             surgeries=[
-                {"surgery": "Knee Replacement", "date": datetime(2020, 11, 15), "hospital": "Seattle General"}
-            ]
+                {
+                    "surgery": "Knee Replacement",
+                    "date": datetime(2020, 11, 15),
+                    "hospital": "Seattle General",
+                }
+            ],
         ),
         "marital": Marital(
             _id="",
@@ -372,8 +401,8 @@ MOCK_PATIENTS = [
             spouse_name="Margaret Johnson",
             marriage_date=datetime(1978, 5, 20),
             number_of_children=2,
-            family_support_system="Strong family support"
-        )
+            family_support_system="Strong family support",
+        ),
     },
     {
         "demographics": Demographics(
@@ -388,7 +417,7 @@ MOCK_PATIENTS = [
             address="321 Bollywood Boulevard, New York, NY 10001",
             emergency_contact_name="Raj Patel",
             emergency_contact_phone="+1-555-0702",
-            insurance_info="Empire Blue Cross - Policy #EB456123"
+            insurance_info="Empire Blue Cross - Policy #EB456123",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -401,7 +430,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=98.8,
             height=162.0,
             weight=60.0,
-            pain_scale=0
+            pain_scale=0,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -413,7 +442,7 @@ MOCK_PATIENTS = [
             education_level="Master's Degree",
             exercise_frequency="4-5 times per week",
             diet_type="Vegetarian",
-            living_situation="Lives with spouse"
+            living_situation="Lives with spouse",
         ),
         "obstetric": Obstetric(
             _id="",
@@ -424,7 +453,7 @@ MOCK_PATIENTS = [
             living_children=1,
             delivery_method=["vaginal"],
             current_pregnancy_status=True,
-            expected_due_date=datetime(2025, 12, 15)
+            expected_due_date=datetime(2025, 12, 15),
         ),
         "marital": Marital(
             _id="",
@@ -433,8 +462,8 @@ MOCK_PATIENTS = [
             spouse_name="Raj Patel",
             marriage_date=datetime(2015, 11, 8),
             number_of_children=1,
-            family_support_system="Extended family support"
-        )
+            family_support_system="Extended family support",
+        ),
     },
     {
         "demographics": Demographics(
@@ -449,7 +478,7 @@ MOCK_PATIENTS = [
             address="654 Basketball Court, Chicago, IL 60601",
             emergency_contact_name="Linda Thompson",
             emergency_contact_phone="+1-555-0802",
-            insurance_info="Blue Cross Blue Shield - Policy #BC789456"
+            insurance_info="Blue Cross Blue Shield - Policy #BC789456",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -462,7 +491,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=99.5,
             height=188.0,
             weight=75.0,
-            pain_scale=0
+            pain_scale=0,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -474,15 +503,15 @@ MOCK_PATIENTS = [
             education_level="College Student",
             exercise_frequency="Daily athletic training",
             diet_type="High protein",
-            living_situation="Lives in dormitory"
+            living_situation="Lives in dormitory",
         ),
         "marital": Marital(
             _id="",
             patient_id="PT0008",
             marital_status="single",
             number_of_children=0,
-            family_support_system="Close family relationships"
-        )
+            family_support_system="Close family relationships",
+        ),
     },
     {
         "demographics": Demographics(
@@ -497,7 +526,7 @@ MOCK_PATIENTS = [
             address="987 Dragon Street, Portland, OR 97201",
             emergency_contact_name="Wei Li",
             emergency_contact_phone="+1-555-0902",
-            insurance_info="Providence Health - Policy #PH321654"
+            insurance_info="Providence Health - Policy #PH321654",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -510,7 +539,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=98.2,
             height=168.0,
             weight=70.0,
-            pain_scale=1
+            pain_scale=1,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -522,22 +551,27 @@ MOCK_PATIENTS = [
             education_level="Master's Degree",
             exercise_frequency="3-4 times per week",
             diet_type="Pescatarian",
-            living_situation="Lives with partner"
+            living_situation="Lives with partner",
         ),
         "medication_history": MedicationHistory(
             _id="",
             patient_id="PT0009",
             current_medications=[
-                {"name": "Levothyroxine", "dosage": "50mcg", "frequency": "Daily", "start_date": datetime(2020, 1, 1)}
-            ]
+                {
+                    "name": "Levothyroxine",
+                    "dosage": "50mcg",
+                    "frequency": "Daily",
+                    "start_date": datetime(2020, 1, 1),
+                }
+            ],
         ),
         "marital": Marital(
             _id="",
             patient_id="PT0009",
             marital_status="single",
             number_of_children=0,
-            family_support_system="Strong community support"
-        )
+            family_support_system="Strong community support",
+        ),
     },
     {
         "demographics": Demographics(
@@ -552,7 +586,7 @@ MOCK_PATIENTS = [
             address="159 Sunshine Avenue, Miami, FL 33101",
             emergency_contact_name="Maria Santos-Garcia",
             emergency_contact_phone="+1-555-1002",
-            insurance_info="Medicare + Medicaid - Policy #MM987654"
+            insurance_info="Medicare + Medicaid - Policy #MM987654",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -565,7 +599,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=95.0,
             height=158.0,
             weight=68.0,
-            pain_scale=6
+            pain_scale=6,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -577,25 +611,41 @@ MOCK_PATIENTS = [
             education_level="Bachelor's Degree",
             exercise_frequency="Light walking with assistance",
             diet_type="Heart-healthy",
-            living_situation="Lives with daughter's family"
+            living_situation="Lives with daughter's family",
         ),
         "past_medical_history": PastMedicalHistory(
             _id="",
             patient_id="PT0010",
             medical_conditions=[
-                {"condition": "Osteoporosis", "diagnosed_date": datetime(2015, 4, 20), "status": "active"},
-                {"condition": "Hypertension", "diagnosed_date": datetime(2010, 7, 12), "status": "active"},
-                {"condition": "Cataracts", "diagnosed_date": datetime(2018, 9, 8), "status": "treated"}
+                {
+                    "condition": "Osteoporosis",
+                    "diagnosed_date": datetime(2015, 4, 20),
+                    "status": "active",
+                },
+                {
+                    "condition": "Hypertension",
+                    "diagnosed_date": datetime(2010, 7, 12),
+                    "status": "active",
+                },
+                {
+                    "condition": "Cataracts",
+                    "diagnosed_date": datetime(2018, 9, 8),
+                    "status": "treated",
+                },
             ],
             surgeries=[
-                {"surgery": "Cataract Surgery", "date": datetime(2019, 1, 15), "hospital": "Miami Eye Center"}
-            ]
+                {
+                    "surgery": "Cataract Surgery",
+                    "date": datetime(2019, 1, 15),
+                    "hospital": "Miami Eye Center",
+                }
+            ],
         ),
         "menstrual": Menstrual(
             _id="",
             patient_id="PT0010",
             menopause_status=True,
-            notes="Menopause at age 52"
+            notes="Menopause at age 52",
         ),
         "marital": Marital(
             _id="",
@@ -604,8 +654,8 @@ MOCK_PATIENTS = [
             spouse_name="Carlos Santos (deceased)",
             marriage_date=datetime(1960, 6, 10),
             number_of_children=3,
-            family_support_system="Lives with family, strong support"
-        )
+            family_support_system="Lives with family, strong support",
+        ),
     },
     # Additional 10 Chinese patients based in China
     {
@@ -621,7 +671,7 @@ MOCK_PATIENTS = [
             address="Building 5, Unit 2, Room 301, Chaoyang District, Beijing 100020",
             emergency_contact_name="Li Zhang",
             emergency_contact_phone="+86-138-0013-8889",
-            insurance_info="Beijing Social Insurance - Policy #BJ2024001"
+            insurance_info="Beijing Social Insurance - Policy #BJ2024001",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -634,7 +684,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=98.7,
             height=175.0,
             weight=70.0,
-            pain_scale=0
+            pain_scale=0,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -648,7 +698,7 @@ MOCK_PATIENTS = [
             education_level="Bachelor's Degree",
             exercise_frequency="Weekend basketball",
             diet_type="Traditional Chinese",
-            living_situation="Lives with parents and wife"
+            living_situation="Lives with parents and wife",
         ),
         "marital": Marital(
             _id="",
@@ -657,8 +707,8 @@ MOCK_PATIENTS = [
             spouse_name="Li Zhang",
             marriage_date=datetime(2020, 10, 1),
             number_of_children=0,
-            family_support_system="Traditional extended family support"
-        )
+            family_support_system="Traditional extended family support",
+        ),
     },
     {
         "demographics": Demographics(
@@ -673,7 +723,7 @@ MOCK_PATIENTS = [
             address="Lane 1234, Huaihai Road, Xuhui District, Shanghai 200030",
             emergency_contact_name="Jun Wang",
             emergency_contact_phone="+86-139-2012-6667",
-            insurance_info="Shanghai Medical Insurance - Policy #SH2024002"
+            insurance_info="Shanghai Medical Insurance - Policy #SH2024002",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -686,7 +736,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=99.1,
             height=162.0,
             weight=55.0,
-            pain_scale=0
+            pain_scale=0,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -698,7 +748,7 @@ MOCK_PATIENTS = [
             education_level="Master's Degree",
             exercise_frequency="Daily Tai Chi",
             diet_type="Vegetarian Buddhist",
-            living_situation="Lives with roommate"
+            living_situation="Lives with roommate",
         ),
         "menstrual": Menstrual(
             _id="",
@@ -708,15 +758,15 @@ MOCK_PATIENTS = [
             flow_duration=5,
             flow_intensity="normal",
             cycle_regularity="regular",
-            contraceptive_method="None"
+            contraceptive_method="None",
         ),
         "marital": Marital(
             _id="",
             patient_id="PT0012",
             marital_status="single",
             number_of_children=0,
-            family_support_system="Close family support"
-        )
+            family_support_system="Close family support",
+        ),
     },
     {
         "demographics": Demographics(
@@ -731,7 +781,7 @@ MOCK_PATIENTS = [
             address="Unit 15-6, Tianhe District, Guangzhou 510630",
             emergency_contact_name="Xiaoli Liu",
             emergency_contact_phone="+86-137-7013-9998",
-            insurance_info="Guangdong Provincial Insurance - Policy #GD2024003"
+            insurance_info="Guangdong Provincial Insurance - Policy #GD2024003",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -744,7 +794,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=97.5,
             height=168.0,
             weight=80.0,
-            pain_scale=2
+            pain_scale=2,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -759,16 +809,24 @@ MOCK_PATIENTS = [
             education_level="Technical Diploma",
             exercise_frequency="Rarely",
             diet_type="Traditional Cantonese",
-            living_situation="Lives with wife and child"
+            living_situation="Lives with wife and child",
         ),
         "past_medical_history": PastMedicalHistory(
             _id="",
             patient_id="PT0013",
             medical_conditions=[
-                {"condition": "Hypertension", "diagnosed_date": datetime(2022, 6, 15), "status": "active"},
-                {"condition": "Fatty Liver", "diagnosed_date": datetime(2023, 3, 8), "status": "active"}
+                {
+                    "condition": "Hypertension",
+                    "diagnosed_date": datetime(2022, 6, 15),
+                    "status": "active",
+                },
+                {
+                    "condition": "Fatty Liver",
+                    "diagnosed_date": datetime(2023, 3, 8),
+                    "status": "active",
+                },
             ],
-            chronic_diseases=["Hypertension", "Fatty Liver Disease"]
+            chronic_diseases=["Hypertension", "Fatty Liver Disease"],
         ),
         "marital": Marital(
             _id="",
@@ -777,8 +835,8 @@ MOCK_PATIENTS = [
             spouse_name="Xiaoli Liu",
             marriage_date=datetime(2005, 5, 1),
             number_of_children=1,
-            family_support_system="Traditional family structure"
-        )
+            family_support_system="Traditional family structure",
+        ),
     },
     {
         "demographics": Demographics(
@@ -793,7 +851,7 @@ MOCK_PATIENTS = [
             address="Apartment 8-12, Yanta District, Xi'an 710075",
             emergency_contact_name="Ming Chen",
             emergency_contact_phone="+86-151-0514-7776",
-            insurance_info="Shaanxi Medical Insurance - Policy #SN2024004"
+            insurance_info="Shaanxi Medical Insurance - Policy #SN2024004",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -806,7 +864,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=98.9,
             height=165.0,
             weight=58.0,
-            pain_scale=0
+            pain_scale=0,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -818,7 +876,7 @@ MOCK_PATIENTS = [
             education_level="Medical Degree",
             exercise_frequency="Daily Qigong",
             diet_type="Traditional Chinese Medicine principles",
-            living_situation="Lives with husband and two children"
+            living_situation="Lives with husband and two children",
         ),
         "obstetric": Obstetric(
             _id="",
@@ -828,7 +886,7 @@ MOCK_PATIENTS = [
             abortions=0,
             living_children=2,
             delivery_method=["vaginal", "c-section"],
-            current_pregnancy_status=False
+            current_pregnancy_status=False,
         ),
         "marital": Marital(
             _id="",
@@ -837,8 +895,8 @@ MOCK_PATIENTS = [
             spouse_name="Ming Chen",
             marriage_date=datetime(2012, 8, 18),
             number_of_children=2,
-            family_support_system="Extended family and in-laws support"
-        )
+            family_support_system="Extended family and in-laws support",
+        ),
     },
     {
         "demographics": Demographics(
@@ -853,7 +911,7 @@ MOCK_PATIENTS = [
             address="Building 23, Jiangbei District, Chongqing 400020",
             emergency_contact_name="Ping Zhou",
             emergency_contact_phone="+86-189-1560-5554",
-            insurance_info="Chongqing Senior Insurance - Policy #CQ2024005"
+            insurance_info="Chongqing Senior Insurance - Policy #CQ2024005",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -866,7 +924,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=96.2,
             height=170.0,
             weight=75.0,
-            pain_scale=3
+            pain_scale=3,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -881,17 +939,29 @@ MOCK_PATIENTS = [
             education_level="Elementary School",
             exercise_frequency="Morning park walks",
             diet_type="Sichuan cuisine",
-            living_situation="Lives with wife"
+            living_situation="Lives with wife",
         ),
         "past_medical_history": PastMedicalHistory(
             _id="",
             patient_id="PT0015",
             medical_conditions=[
-                {"condition": "COPD", "diagnosed_date": datetime(2020, 9, 12), "status": "active"},
-                {"condition": "Type 2 Diabetes", "diagnosed_date": datetime(2018, 4, 20), "status": "active"},
-                {"condition": "Hypertension", "diagnosed_date": datetime(2015, 2, 8), "status": "active"}
+                {
+                    "condition": "COPD",
+                    "diagnosed_date": datetime(2020, 9, 12),
+                    "status": "active",
+                },
+                {
+                    "condition": "Type 2 Diabetes",
+                    "diagnosed_date": datetime(2018, 4, 20),
+                    "status": "active",
+                },
+                {
+                    "condition": "Hypertension",
+                    "diagnosed_date": datetime(2015, 2, 8),
+                    "status": "active",
+                },
             ],
-            chronic_diseases=["COPD", "Type 2 Diabetes", "Hypertension"]
+            chronic_diseases=["COPD", "Type 2 Diabetes", "Hypertension"],
         ),
         "marital": Marital(
             _id="",
@@ -900,8 +970,8 @@ MOCK_PATIENTS = [
             spouse_name="Ping Zhou",
             marriage_date=datetime(1985, 3, 15),
             number_of_children=2,
-            family_support_system="Adult children provide support"
-        )
+            family_support_system="Adult children provide support",
+        ),
     },
     {
         "demographics": Demographics(
@@ -916,7 +986,7 @@ MOCK_PATIENTS = [
             address="Room 1205, Binjiang District, Hangzhou 310051",
             emergency_contact_name="Hao Xu",
             emergency_contact_phone="+86-177-1695-3332",
-            insurance_info="Zhejiang Medical Insurance - Policy #ZJ2024006"
+            insurance_info="Zhejiang Medical Insurance - Policy #ZJ2024006",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -929,7 +999,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=99.3,
             height=168.0,
             weight=52.0,
-            pain_scale=0
+            pain_scale=0,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -941,7 +1011,7 @@ MOCK_PATIENTS = [
             education_level="Master's Degree",
             exercise_frequency="Yoga 4 times per week",
             diet_type="Health-conscious, low sodium",
-            living_situation="Lives alone, close to family"
+            living_situation="Lives alone, close to family",
         ),
         "menstrual": Menstrual(
             _id="",
@@ -951,15 +1021,15 @@ MOCK_PATIENTS = [
             flow_duration=4,
             flow_intensity="light",
             cycle_regularity="regular",
-            contraceptive_method="IUD"
+            contraceptive_method="IUD",
         ),
         "marital": Marital(
             _id="",
             patient_id="PT0016",
             marital_status="single",
             number_of_children=0,
-            family_support_system="Close-knit family"
-        )
+            family_support_system="Close-knit family",
+        ),
     },
     {
         "demographics": Demographics(
@@ -974,7 +1044,7 @@ MOCK_PATIENTS = [
             address="Unit 7-8, Heping District, Tianjin 300050",
             emergency_contact_name="Hui Li",
             emergency_contact_phone="+86-158-6817-4443",
-            insurance_info="Tianjin Municipal Insurance - Policy #TJ2024007"
+            insurance_info="Tianjin Municipal Insurance - Policy #TJ2024007",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -987,7 +1057,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=97.0,
             height=172.0,
             weight=82.0,
-            pain_scale=4
+            pain_scale=4,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -1001,16 +1071,24 @@ MOCK_PATIENTS = [
             education_level="High School",
             exercise_frequency="Occasional walking",
             diet_type="Northern Chinese cuisine",
-            living_situation="Lives with wife and elderly mother"
+            living_situation="Lives with wife and elderly mother",
         ),
         "past_medical_history": PastMedicalHistory(
             _id="",
             patient_id="PT0017",
             medical_conditions=[
-                {"condition": "Lumbar Disc Disease", "diagnosed_date": datetime(2021, 11, 5), "status": "active"},
-                {"condition": "Hypertension", "diagnosed_date": datetime(2019, 7, 18), "status": "active"}
+                {
+                    "condition": "Lumbar Disc Disease",
+                    "diagnosed_date": datetime(2021, 11, 5),
+                    "status": "active",
+                },
+                {
+                    "condition": "Hypertension",
+                    "diagnosed_date": datetime(2019, 7, 18),
+                    "status": "active",
+                },
             ],
-            chronic_diseases=["Lumbar Disc Disease", "Hypertension"]
+            chronic_diseases=["Lumbar Disc Disease", "Hypertension"],
         ),
         "marital": Marital(
             _id="",
@@ -1019,8 +1097,8 @@ MOCK_PATIENTS = [
             spouse_name="Hui Li",
             marriage_date=datetime(1995, 10, 20),
             number_of_children=1,
-            family_support_system="Multi-generational household"
-        )
+            family_support_system="Multi-generational household",
+        ),
     },
     {
         "demographics": Demographics(
@@ -1035,7 +1113,7 @@ MOCK_PATIENTS = [
             address="Building 45, Nanshan District, Shenzhen 518054",
             emergency_contact_name="Jun Wu",
             emergency_contact_phone="+86-134-1890-2221",
-            insurance_info="Shenzhen Tech Insurance - Policy #SZ2024008"
+            insurance_info="Shenzhen Tech Insurance - Policy #SZ2024008",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -1048,7 +1126,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=98.6,
             height=160.0,
             weight=62.0,
-            pain_scale=0
+            pain_scale=0,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -1060,7 +1138,7 @@ MOCK_PATIENTS = [
             education_level="Master's Degree",
             exercise_frequency="Swimming twice weekly",
             diet_type="Balanced modern diet",
-            living_situation="Lives with husband"
+            living_situation="Lives with husband",
         ),
         "obstetric": Obstetric(
             _id="",
@@ -1070,7 +1148,7 @@ MOCK_PATIENTS = [
             abortions=0,
             living_children=0,
             current_pregnancy_status=True,
-            expected_due_date=datetime(2025, 11, 20)
+            expected_due_date=datetime(2025, 11, 20),
         ),
         "marital": Marital(
             _id="",
@@ -1079,8 +1157,8 @@ MOCK_PATIENTS = [
             spouse_name="Jun Wu",
             marriage_date=datetime(2022, 2, 14),
             number_of_children=0,
-            family_support_system="Young couple with distant family support"
-        )
+            family_support_system="Young couple with distant family support",
+        ),
     },
     {
         "demographics": Demographics(
@@ -1095,7 +1173,7 @@ MOCK_PATIENTS = [
             address="Dormitory 6, Room 412, Wuhan University, Wuhan 430072",
             emergency_contact_name="Feng Yang",
             emergency_contact_phone="+86-187-0119-1110",
-            insurance_info="Student Medical Insurance - Policy #WH2024009"
+            insurance_info="Student Medical Insurance - Policy #WH2024009",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -1108,7 +1186,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=99.5,
             height=178.0,
             weight=68.0,
-            pain_scale=0
+            pain_scale=0,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -1120,15 +1198,15 @@ MOCK_PATIENTS = [
             education_level="University Student",
             exercise_frequency="Basketball 3 times per week",
             diet_type="Cafeteria food, instant noodles",
-            living_situation="University dormitory with roommates"
+            living_situation="University dormitory with roommates",
         ),
         "marital": Marital(
             _id="",
             patient_id="PT0019",
             marital_status="single",
             number_of_children=0,
-            family_support_system="Parents provide financial support"
-        )
+            family_support_system="Parents provide financial support",
+        ),
     },
     {
         "demographics": Demographics(
@@ -1143,7 +1221,7 @@ MOCK_PATIENTS = [
             address="Lane 567, Jingan District, Shanghai 200040",
             emergency_contact_name="Wei Huang",
             emergency_contact_phone="+86-133-4520-8887",
-            insurance_info="Shanghai Senior Citizen Insurance - Policy #SH2024010"
+            insurance_info="Shanghai Senior Citizen Insurance - Policy #SH2024010",
         ),
         "vital_signs": VitalSigns(
             _id="",
@@ -1156,7 +1234,7 @@ MOCK_PATIENTS = [
             oxygen_saturation=94.5,
             height=155.0,
             weight=60.0,
-            pain_scale=5
+            pain_scale=5,
         ),
         "social_history": SocialHistory(
             _id="",
@@ -1168,26 +1246,46 @@ MOCK_PATIENTS = [
             education_level="Elementary School",
             exercise_frequency="Daily morning exercises in park",
             diet_type="Traditional Shanghai cuisine",
-            living_situation="Lives with son's family"
+            living_situation="Lives with son's family",
         ),
         "past_medical_history": PastMedicalHistory(
             _id="",
             patient_id="PT0020",
             medical_conditions=[
-                {"condition": "Osteoarthritis", "diagnosed_date": datetime(2018, 3, 12), "status": "active"},
-                {"condition": "Hypertension", "diagnosed_date": datetime(2012, 8, 25), "status": "active"},
-                {"condition": "Osteoporosis", "diagnosed_date": datetime(2020, 6, 10), "status": "active"},
-                {"condition": "Cataracts", "diagnosed_date": datetime(2022, 1, 8), "status": "treated"}
+                {
+                    "condition": "Osteoarthritis",
+                    "diagnosed_date": datetime(2018, 3, 12),
+                    "status": "active",
+                },
+                {
+                    "condition": "Hypertension",
+                    "diagnosed_date": datetime(2012, 8, 25),
+                    "status": "active",
+                },
+                {
+                    "condition": "Osteoporosis",
+                    "diagnosed_date": datetime(2020, 6, 10),
+                    "status": "active",
+                },
+                {
+                    "condition": "Cataracts",
+                    "diagnosed_date": datetime(2022, 1, 8),
+                    "status": "treated",
+                },
             ],
             surgeries=[
-                {"surgery": "Cataract Surgery (both eyes)", "date": datetime(2022, 4, 15), "hospital": "Shanghai Eye Hospital"}
-            ]
+                {
+                    "surgery": "Cataract Surgery (both eyes)",
+                    "date": datetime(2022, 4, 15),
+                    "hospital": "Shanghai Eye Hospital",
+                }
+            ],
         ),
         "menstrual": Menstrual(
             _id="",
             patient_id="PT0020",
             menopause_status=True,
-            notes="Menopause at age 50"
+            notes="Menopause at age 50",
         ),
         "marital": Marital(
             _id="",
@@ -1196,10 +1294,11 @@ MOCK_PATIENTS = [
             spouse_name="Ming Huang (deceased)",
             marriage_date=datetime(1968, 9, 25),
             number_of_children=2,
-            family_support_system="Lives with son's family, traditional care"
-        )
-    }
+            family_support_system="Lives with son's family, traditional care",
+        ),
+    },
 ]
+
 
 def get_patient_data(patient_id: str = None):
     """
@@ -1218,13 +1317,18 @@ def get_patient_data(patient_id: str = None):
         return None
     return MOCK_PATIENTS
 
+
 def get_all_demographics():
     """Get demographics for all mock patients."""
     return [patient["demographics"] for patient in MOCK_PATIENTS]
 
+
 def get_all_vital_signs():
     """Get vital signs for all mock patients that have them."""
-    return [patient["vital_signs"] for patient in MOCK_PATIENTS if "vital_signs" in patient]
+    return [
+        patient["vital_signs"] for patient in MOCK_PATIENTS if "vital_signs" in patient
+    ]
+
 
 # Summary of our mock patients:
 """
