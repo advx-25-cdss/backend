@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from bson import ObjectId
 from fastapi import APIRouter
 from database import db
 from kernel.decision import summarize_user_data
@@ -23,23 +24,24 @@ async def get_recommended_tests(case_id: str):
     if not transcript:
         return {"message": "No transcription found for the given case ID."}
     recommends = get_test_recommendations(transcript["text"])
-    for recommendation in recommends:
-        if not recommendation.get("test_name"):
+    for recommendation in recommends.recommendations:
+        print(recommendation)
+        if not recommendation.test_name:
             continue
         await db.cdss.get_collection("tests").insert_one(
             Test(
                 _id="",
                 case_id=case_id,
-                patient_id=await db.cdss.get_collection("cases").find_one(
-                    {"case_id": case_id}
-                )["patient_id"],
-                test_name=recommendation.get("test_name"),
-                test_date=recommendation.get("test_date"),
-                notes=recommendation.get("notes", ""),
+                patient_id=(await db.cdss.get_collection("cases").find_one(
+                    {"_id": ObjectId(case_id)}
+                ))["patient_id"],
+                test_name=recommendation.test_name,
+                test_date=datetime.now(timezone.utc),
+                notes=recommendation.notes,
                 results=[],
             ).model_dump()
         )
-    return recommends
+
 
 
 @router.post("/{case_id}/treatments")
@@ -61,6 +63,7 @@ async def get_recommended_treatments(case_id: str):
         return {"message": "No conversation found for the given case ID."}
     data = await summarize_user_data(text)
     recommendations = generate_clinical_plan(data)
+    print(recommendations)
     diagnosis = Diagnosis(
         _id="",
         case_id=case_id,
@@ -101,10 +104,4 @@ async def get_recommended_treatments(case_id: str):
                 "outcome": "",
             }
         )
-    return {
-        "diagnosis": recommendations.diagnosis.model_dump(),
-        "medications": [med.model_dump() for med in recommendations.medication_plan],
-        "treatments": [
-            treatment.model_dump() for treatment in recommendations.other_treatments
-        ],
-    }
+

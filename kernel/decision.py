@@ -1,3 +1,7 @@
+from datetime import datetime, timezone
+
+from bson import ObjectId
+
 from database import db
 from kernel.chat_output import (
     PatientSummary,
@@ -8,11 +12,11 @@ from kernel.chat_output import (
 
 
 async def summarize_user_data(case_id: str) -> PatientSummary:
-    patient_case = await db.cdss.get_collection("cases").find_one({"case_id": case_id})
+    patient_case = await db.cdss.get_collection("cases").find_one({"_id": ObjectId(case_id)})
     patient_id = patient_case.get("patient_id") if patient_case else None
     if not patient_id:
         raise "Patient ID not found for the given case."
-    patient_demographics = await db.cdss.get_collection("patients").find_one(
+    patient_demographics = await db.cdss.get_collection("demographics").find_one(
         {"patient_id": patient_id}
     )
     if not patient_demographics:
@@ -38,7 +42,10 @@ async def summarize_user_data(case_id: str) -> PatientSummary:
         .find(
             {
                 "patient_id": patient_id,
-                "end_date": {"$or": [{"$exists": False}, {"$gt": datetime.now()}]},
+                "$or": [
+                    { "end_date": { "$exists": False } },
+                    { "end_date": { "$gt": datetime.now() } }
+                ]
             }
         )
         .to_list(length=None)
@@ -64,7 +71,7 @@ async def summarize_user_data(case_id: str) -> PatientSummary:
         diagnoses.append(
             DiagnosisOutput(
                 diagnosis_name=diagnosis.get("diagnosis_name", "Unknown"),
-                diagnosis_date=diagnosis.get("diagnosis_date", "Unknown"),
+                diagnosis_date=datetime.now(timezone.utc).isoformat(),
                 status=diagnosis.get("status", "Unknown"),
                 notes=diagnosis.get("notes", ""),
                 follow_up=diagnosis.get("follow_up", ""),
@@ -80,7 +87,7 @@ async def summarize_user_data(case_id: str) -> PatientSummary:
         test_results.append(
             TestResultOutput(
                 test_name=test.get("test_name", "Unknown"),
-                results=test.get("results", []),
+                results=[],
                 notes=test.get("notes", ""),
             )
         )

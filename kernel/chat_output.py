@@ -100,6 +100,7 @@ async def get_ai_chat_response(
             messages=prompt,
         )
         ai_response_content = response.choices[0].message.content
+        print("Received AI response from OpenAI:", ai_response_content)
         result = await db.cdss.get_collection("conversations").insert_one(
             {
                 "patient_id": patient_summary.patient_info.get("id"),

@@ -1,13 +1,10 @@
-from datetime import datetime
+from pydantic import BaseModel
 from kernel.chat_output import (
-    PatientSummary,
-    Medicine as MedicineOutput,
-    Diagnosis as DiagnosisOutput,
-    TestResult as TestResultOutput,
-    get_ai_chat_response,
+    get_ai_chat_response, continue_dialogue,
 )
 from fastapi import APIRouter
 from database import db
+from kernel.decision import summarize_user_data
 
 router = APIRouter()
 
@@ -19,19 +16,24 @@ async def initiate_dialogue(case_id: str):
     :param case_id: The ID of the case for which the dialogue is being initiated.
     :return: The conversation ID.
     """
+    patient_summary = await summarize_user_data(case_id)
 
     # Here you would typically start a new conversation in your dialogue system
     id, result = await get_ai_chat_response(
-        patient_summary, "这是一位病人的病历摘要。简单总结情况。"
+        patient_summary, "这是一位病人的病历摘要。简单总结情况。", case_id
     )
     return {
-        "conversation_id": id,
+        "conversation_id": str(id),
         "summary": result,
     }
 
 
+class UserInputData(BaseModel):
+    user_input: str
+
+
 @router.post("/dialogues/{conversation_id}/continuation")
-async def continue_dialogue(conversation_id: str, user_input: str):
+async def continue_dialogue_(conversation_id: str, input_data: UserInputData):
     """
     Continue a dialogue with user input.
     :param conversation_id: The ID of the conversation to continue.
@@ -40,10 +42,9 @@ async def continue_dialogue(conversation_id: str, user_input: str):
     """
     # Here you would typically fetch the conversation by ID and append the user input
     # For simplicity, we assume the function get_ai_chat_response handles this
-    id, result = await get_ai_chat_response(conversation_id, user_input)
+    result = await continue_dialogue(conversation_id, input_data.user_input)
     return {
-        "conversation_id": id,
-        "response": result,
+        "summary": result,
     }
 
 
