@@ -132,6 +132,7 @@ async def update_test(test_id: str, test_update: dict):
 
         # Update the test
         updated_test = await test_service.update(test_id, test_update)
+        updated_test["_id"] = str(updated_test["_id"])  # Convert ObjectId to str
         return {"message": "Test updated successfully", "data": updated_test}
     except HTTPException:
         raise

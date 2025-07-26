@@ -27,6 +27,7 @@ async def summarize_user_data(case_id: str) -> PatientSummary:
     demographics = await db.cdss.get_collection("demographics").find_one(
         {"patient_id": patient_id}
     )
+    print("Demographics:", demographics)
     patient_info = {
         "id": patient_id,
         "name": demographics.get("name", "Unknown"),
@@ -37,6 +38,7 @@ async def summarize_user_data(case_id: str) -> PatientSummary:
             "history_of_present_illness", "Unknown"
         ),
     }
+    print("Patient Info:", patient_info)
     meditation_info = (
         await db.cdss.get_collection("medications")
         .find(
@@ -50,6 +52,7 @@ async def summarize_user_data(case_id: str) -> PatientSummary:
         )
         .to_list(length=None)
     )
+    print("Current Medications:", meditation_info)
     current_medications = []
     for med in meditation_info:
         current_medications.append(

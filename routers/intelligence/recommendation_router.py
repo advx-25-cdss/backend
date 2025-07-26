@@ -6,7 +6,7 @@ from database import db
 from kernel.decision import summarize_user_data
 from kernel.diagnosis_treatment_output import generate_clinical_plan
 from kernel.tests_struct_output import get_test_recommendations
-from models.dianosis_models import Test, Diagnosis
+from models.dianosis_models import Test, Diagnosis, Medicine, Treatment
 
 router = APIRouter()
 
@@ -25,7 +25,6 @@ async def get_recommended_tests(case_id: str):
         return {"message": "No transcription found for the given case ID."}
     recommends = get_test_recommendations(transcript["text"])
     for recommendation in recommends.recommendations:
-        print(recommendation)
         if not recommendation.test_name:
             continue
         await db.cdss.get_collection("tests").insert_one(
@@ -41,6 +40,7 @@ async def get_recommended_tests(case_id: str):
                 results=[],
             ).model_dump()
         )
+    return len(recommends.recommendations)
 
 
 
@@ -51,17 +51,7 @@ async def get_recommended_treatments(case_id: str):
     This endpoint retrieves treatments that are recommended based on the case ID.
     """
     # Placeholder for actual implementation
-    conversation = await db.cdss.get_collection("conversations").find_one(
-        {"case_id": case_id}
-    )
-    text = (
-        conversation["conversation"][0]["content"]
-        if conversation and "conversation" in conversation
-        else ""
-    )
-    if not text:
-        return {"message": "No conversation found for the given case ID."}
-    data = await summarize_user_data(text)
+    data = await summarize_user_data(case_id)
     recommendations = generate_clinical_plan(data)
     print(recommendations)
     diagnosis = Diagnosis(
@@ -79,29 +69,30 @@ async def get_recommended_treatments(case_id: str):
     await db.cdss.get_collection("diagnoses").insert_one(diagnosis.model_dump())
     for med in recommendations.medication_plan:
         await db.cdss.get_collection("medications").insert_one(
-            {
-                "_id": "",
-                "case_id": case_id,
-                "patient_id": data.patient_info.get("id", ""),
-                "medicine_name": med.medicine_name,
-                "dosage": med.dosage,
-                "route": med.route,
-                "frequency": med.frequency,
-                "start_date": datetime.now(timezone.utc),
-                "end_date": None,
-                "notes": med.notes,
-            }
+            Medicine(
+                _id="",
+                case_id=case_id,
+                patient_id=data.patient_info.get("id", ""),
+                medicine_name=med.medicine_name,
+                dosage=med.dosage,
+                route=med.route,
+                frequency=med.frequency,
+                start_date=datetime.now(timezone.utc),
+                end_date=None,
+                notes=med.notes,
+            ).model_dump()
         )
     for treatment in recommendations.other_treatments:
         await db.cdss.get_collection("treatments").insert_one(
-            {
-                "_id": "",
-                "case_id": case_id,
-                "patient_id": data.patient_info.get("id", ""),
-                "treatment_name": treatment.treatment_name,
-                "treatment_type": treatment.treatment_type,
-                "notes": treatment.notes,
-                "outcome": "",
-            }
+            Treatment(
+                _id="",
+                case_id=case_id,
+                patient_id=data.patient_info.get("id", ""),
+                treatment_name=treatment.treatment_name,
+                treatment_type=treatment.treatment_type,
+                treatment_date=datetime.now(timezone.utc),
+                notes=treatment.notes,
+            ).model_dump()
         )
+    return [1, len(recommendations.medication_plan), len(recommendations.other_treatments)]
 

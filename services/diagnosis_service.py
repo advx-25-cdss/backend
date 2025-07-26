@@ -26,7 +26,7 @@ class DiagnosisService:
         data["updated_at"] = datetime.now(timezone.utc)
 
         await self.collection.insert_one(data)
-        created_record = await self.collection.find_one({"_id": data["_id"]})
+        created_record = await self.collection.find_one({"_id": ObjectId(data["_id"])})
         created_record["_id"] = str(
             created_record["_id"]
         )  # Convert ObjectId to string for JSON serialization
@@ -34,7 +34,7 @@ class DiagnosisService:
 
     async def get_by_id(self, record_id: str) -> Optional[dict]:
         """Get a record by ID"""
-        return await self.collection.find_one({"_id": record_id})
+        return await self.collection.find_one({"_id": ObjectId(record_id)})
 
     async def get_by_patient_id(self, patient_id: str) -> List[dict]:
         """Get all records for a specific patient"""
@@ -67,13 +67,13 @@ class DiagnosisService:
         # Remove None values and _id from update data
         update_data = {k: v for k, v in data.items() if v is not None and k != "_id"}
 
-        await self.collection.update_one({"_id": record_id}, {"$set": update_data})
+        await self.collection.update_one({"_id": ObjectId(record_id)}, {"$set": update_data})
 
-        return await self.collection.find_one({"_id": record_id})
+        return await self.collection.find_one({"_id": ObjectId(record_id)})
 
     async def delete(self, record_id: str) -> bool:
         """Delete a record"""
-        result = await self.collection.delete_one({"_id": record_id})
+        result = await self.collection.delete_one({"_id": ObjectId(record_id)})
         return result.deleted_count > 0
 
     async def search(self, query: dict, skip: int = 0, limit: int = 100) -> List[dict]:
