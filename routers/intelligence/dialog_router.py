@@ -62,7 +62,26 @@ async def get_dialogue(conversation_id: str):
     )
     if not conversation:
         return {"error": "Conversation not found"}
+    conversation['_id'] = str(conversation['_id'])
     return {
-        "conversation_id": conversation["_id"],
+        "conversation_id": str(conversation["_id"]),
         "details": conversation,
+    }
+
+@router.get("/dialogues/cases/{case_id}")
+async def get_case(case_id: str):
+    conversation = await db.cdss.get_collection("conversations").find_one({
+        "case_id": case_id
+    })
+    if not conversation:
+        return {"error": "Conversation not found"}
+    conversation['_id'] = str(conversation['_id'])
+    messages = conversation['messages']
+    if len(messages) > 2:
+        messages = messages[2:]
+    else:
+        messages = []
+    return {
+        "conversation_id": str(conversation["_id"]),
+        "details": messages,
     }

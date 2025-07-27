@@ -158,6 +158,14 @@ async def continue_dialogue(
             messages=prompt,
         )
         ai_response_content = response.choices[0].message.content
+        await db.cdss.get_collection("conversations").update_one(
+            {"_id": ObjectId(conversation_id)},
+            {
+                "$push": {
+                    "messages": {"role": "user", "content": user_input}
+                }
+            },
+        )
         updated_conversation = await db.cdss.get_collection("conversations").update_one(
             {"_id": ObjectId(conversation_id)},
             {
