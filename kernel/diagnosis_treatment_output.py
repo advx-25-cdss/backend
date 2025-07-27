@@ -75,11 +75,16 @@ def generate_clinical_plan(patient_data: PatientSummary) -> Optional[ClinicalPla
     """
     load_dotenv()
     api_key = os.getenv("OPENAI_API_KEY")
+    use_ppio = os.getenv("PPIO", 1)
     if not api_key:
         print("Error: OPENAI_API_KEY not found in .env file.")
         return None
 
-    client = OpenAI(api_key=api_key)
+    if use_ppio:
+        client = OpenAI(api_key=os.getenv("PPIO_KEY"), base_url="https://api.ppinfra.com/v3/openai")
+    else:
+        client = OpenAI(api_key=api_key)
+
 
     # --- The Core Prompt Engineering ---
     system_prompt = f"""
@@ -112,7 +117,7 @@ def generate_clinical_plan(patient_data: PatientSummary) -> Optional[ClinicalPla
     try:
         print("Requesting clinical plan from OpenAI...")
         response = client.chat.completions.parse(
-            model="gpt-4o",
+            model="gpt-4o" if not use_ppio else "qwen/qwen3-235b-a22b-thinking-2507",
             response_format=ClinicalPlan,
             messages=[
                 {"role": "system", "content": system_prompt},

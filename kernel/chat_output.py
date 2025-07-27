@@ -137,11 +137,15 @@ async def continue_dialogue(
     try:
         load_dotenv()
         api_key = os.getenv("OPENAI_API_KEY")
+        use_ppio = os.getenv("PPIO", 1)
         if not api_key:
             print("Error: OPENAI_API_KEY not found in .env file.")
             return None
 
-        client = OpenAI(api_key=api_key)
+        if use_ppio:
+            client = OpenAI(api_key=os.getenv("PPIO_KEY"), base_url="https://api.ppinfra.com/v3/openai")
+        else:
+            client = OpenAI(api_key=api_key)
 
         conversation = await db.cdss.get_collection("conversations").find_one(
             {"_id": ObjectId(conversation_id)}
@@ -154,7 +158,7 @@ async def continue_dialogue(
 
         print("Continuing dialogue with OpenAI...")
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o" if not use_ppio else "qwen/qwen2.5-7b-instruct",
             messages=prompt,
         )
         ai_response_content = response.choices[0].message.content
